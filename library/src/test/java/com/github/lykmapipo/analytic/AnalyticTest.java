@@ -163,6 +163,30 @@ public class AnalyticTest {
     }
 
     @Test
+    public void shouldBeAbleToTrackAppLogin_01() {
+        Exception exception = null;
+        try {
+            Analytic.App.loggedIn(TEST_PARAM);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackLogin_02() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.App.loggedIn(TEST_PARAM, params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
     public void shouldBeAbleToTrackTutorialBegin_01() {
         Exception exception = null;
         try {

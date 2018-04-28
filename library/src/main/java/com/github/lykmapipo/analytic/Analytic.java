@@ -35,6 +35,7 @@ public final class Analytic {
     //TODO track if user login
     //TODO track android(medium/channel/device)
     //TODO add default signin/login method
+    //TODO make use of trackable
 
     /**
      * {@link FirebaseAnalytics} instance
@@ -194,6 +195,44 @@ public final class Analytic {
         }
 
         /**
+         * Logs user logged in event
+         *
+         * @see FirebaseAnalytics.Event#LOGIN
+         * @see FirebaseAnalytics.Param#METHOD
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#LOGIN">LOGIN</a>
+         */
+        public static synchronized void loggedIn(@NonNull String method, @Nullable Bundle params) {
+
+            if (!TextUtils.isEmpty(method)) {
+
+                String eventName = FirebaseAnalytics.Event.LOGIN;
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.METHOD, method);
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                track(eventName, bundle);
+            }
+        }
+
+        /**
+         * Logs user logged in event
+         *
+         * @see Analytic.App#loggedIn(String, Bundle)
+         * @see FirebaseAnalytics.Event#LOGIN
+         * @see FirebaseAnalytics.Param#METHOD
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#LOGIN">LOGIN</a>
+         */
+        public static synchronized void loggedIn(@NonNull String method) {
+            Bundle params = new Bundle();
+            loggedIn(method, params);
+        }
+
+
+        /**
          * Logs user signed up event
          * <p>
          * This event indicates that a user has signed up for an account in your app.
@@ -222,6 +261,7 @@ public final class Analytic {
                 track(eventName, bundle);
             }
         }
+
 
         /**
          * Logs user signed up event
