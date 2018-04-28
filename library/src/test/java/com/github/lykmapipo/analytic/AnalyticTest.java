@@ -138,6 +138,55 @@ public class AnalyticTest {
         assertThat(exception, is(equalTo(null)));
     }
 
+    @Test
+    public void shouldBeAbleToTrackTutorialBegin_01() {
+        Exception exception = null;
+        try {
+            Analytic.Tutorial.begin();
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackTutorialBegin_02() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.Tutorial.begin(params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackTutorialComplete_01() {
+        Exception exception = null;
+        try {
+            Analytic.Tutorial.complete();
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackTutorialComplete_02() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.Tutorial.complete(params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+
     @After
     public void clean() {
         context = null;

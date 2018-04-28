@@ -179,4 +179,83 @@ public final class Analytic {
             opened(params);
         }
     }
+
+
+    /**
+     * Track tutorial events
+     */
+    public static class Tutorial {
+        /**
+         * Logs tutorial begin event
+         * <p>
+         * This event signifies the start of the on-boarding process in your app.
+         * Use this in a funnel with {@link FirebaseAnalytics.Event#TUTORIAL_COMPLETE} to understand
+         * how many users complete this process and move on to the full app experience.
+         * </p>
+         *
+         * @param params Additional parameter to track with event
+         * @see Analytic#track(String, Bundle)
+         * @see FirebaseAnalytics.Event#TUTORIAL_BEGIN
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#TUTORIAL_BEGIN">TUTORIAL_BEGIN</a>
+         */
+        public static synchronized void begin(@Nullable Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.TUTORIAL_BEGIN;
+
+            track(eventName, params);
+        }
+
+        /**
+         * Logs tutorial begin event
+         * <p>
+         * This event signifies the start of the on-boarding process in your app.
+         * Use this in a funnel with {@link FirebaseAnalytics.Event#TUTORIAL_COMPLETE} to understand
+         * how many users complete this process and move on to the full app experience.
+         * </p>
+         *
+         * @see Analytic.Tutorial#begin(Bundle)
+         * @see FirebaseAnalytics.Event#TUTORIAL_BEGIN
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#TUTORIAL_BEGIN">TUTORIAL_BEGIN</a>
+         */
+        public static synchronized void begin() {
+            Bundle params = new Bundle();
+            begin(params);
+        }
+
+        /**
+         * Logs tutorial complete event
+         * <p>
+         * Use this event to signify the user's completion of your app's on-boarding process.
+         * Add this to a funnel with {@link FirebaseAnalytics.Event#TUTORIAL_BEGIN} to gauge
+         * the completion rate of your on-boarding process.
+         * </p>
+         *
+         * @param params Additional parameter to track with event
+         * @see FirebaseAnalytics.Event#TUTORIAL_COMPLETE
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#TUTORIAL_COMPLETE">TUTORIAL_COMPLETE</a>
+         */
+        public static synchronized void complete(@Nullable Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.TUTORIAL_COMPLETE;
+
+            track(eventName, params);
+        }
+
+        /**
+         * Logs tutorrial complete event
+         * <p>
+         * Use this event to signify the user's completion of your app's on-boarding process.
+         * Add this to a funnel with {@link FirebaseAnalytics.Event#TUTORIAL_BEGIN} to gauge
+         * the completion rate of your on-boarding process.
+         * </p>
+         *
+         * @see Analytic.Tutorial#complete(Bundle)
+         * @see FirebaseAnalytics.Event#TUTORIAL_COMPLETE
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#TUTORIAL_COMPLETE">TUTORIAL_COMPLETE</a>
+         */
+        public static synchronized void complete() {
+            Bundle params = new Bundle();
+            complete(params);
+        }
+    }
 }
