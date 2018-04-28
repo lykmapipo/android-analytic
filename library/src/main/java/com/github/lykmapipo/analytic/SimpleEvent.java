@@ -69,7 +69,8 @@ public class SimpleEvent implements Event {
         return this;
     }
 
-    public SimpleEvent setParams(@NonNull String key, @NonNull String value) {
+    @NonNull
+    public SimpleEvent setParam(@NonNull String key, @NonNull String value) {
         Bundle bundle = new Bundle();
         boolean shouldSet = !TextUtils.isEmpty(key) && !TextUtils.isEmpty(value);
         if (shouldSet) {
@@ -78,7 +79,8 @@ public class SimpleEvent implements Event {
         return this.setParams(bundle);
     }
 
-    public SimpleEvent setParams(@NonNull String key, @NonNull Long value) {
+    @NonNull
+    public SimpleEvent setParam(@NonNull String key, @NonNull Long value) {
         Bundle bundle = new Bundle();
         boolean shouldSet = !TextUtils.isEmpty(key);
         if (shouldSet) {
@@ -87,7 +89,8 @@ public class SimpleEvent implements Event {
         return this.setParams(bundle);
     }
 
-    public SimpleEvent setParams(@NonNull String key, @NonNull Double value) {
+    @NonNull
+    public SimpleEvent setParam(@NonNull String key, @NonNull Double value) {
         Bundle bundle = new Bundle();
         boolean shouldSet = !TextUtils.isEmpty(key);
         if (shouldSet) {
@@ -96,6 +99,7 @@ public class SimpleEvent implements Event {
         return this.setParams(bundle);
     }
 
+    @NonNull
     public SimpleEvent setParams(@NonNull String key, @NonNull Bundle value) {
         Bundle bundle = new Bundle();
         boolean shouldSet = !TextUtils.isEmpty(key);

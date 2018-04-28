@@ -30,7 +30,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Config(sdk = 23)
 @RunWith(RobolectricTestRunner.class)
 public class AnalyticTest {
-    String TEST_EVENT = "test_event";
+    private String TEST_EVENT = "test_event";
+    private String TEST_PARAM = "test_param";
     private Context context;
 
     @Before
@@ -103,9 +104,9 @@ public class AnalyticTest {
         try {
             SimpleEvent event =
                     new SimpleEvent()
-                            .setName("SIMPLE_EVENT")
+                            .setName(TEST_EVENT)
                             .setTime(new Date())
-                            .setParams("SIMPLE", "SIMPLE");
+                            .setParam(TEST_PARAM, TEST_PARAM);
             Analytic.track(event);
         } catch (Exception e) {
             exception = e;
