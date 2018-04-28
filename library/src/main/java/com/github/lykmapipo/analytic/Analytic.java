@@ -152,10 +152,15 @@ public final class Analytic {
      */
     public static class App {
         /**
-         * Logs an app open event. Events with the same name must have the same parameters.
+         * Logs an app open event
+         * <p>
+         * By logging this event when an App is moved to the foreground,
+         * developers can understand how often users leave and return during the course of
+         * a Session. Although Sessions are automatically reported, this event can
+         * provide further clarification around the continuous engagement of app-users.
+         * </p>
          *
          * @param params Additional parameter to track with event
-         * @see Analytic#track(String, Bundle)
          * @see FirebaseAnalytics.Event#APP_OPEN
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#APP_OPEN">APP_OPEN</a>
          */
@@ -167,10 +172,15 @@ public final class Analytic {
         }
 
         /**
-         * Logs an app open event. Events with the same name must have the same parameters.
+         * Logs an app open event
+         * <p>
+         * By logging this event when an App is moved to the foreground,
+         * developers can understand how often users leave and return during the course of
+         * a Session. Although Sessions are automatically reported, this event can
+         * provide further clarification around the continuous engagement of app-users.
+         * </p>
          *
          * @see Analytic.App#opened(Bundle)
-         * @see Analytic#track(String, Bundle)
          * @see FirebaseAnalytics.Event#APP_OPEN
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#APP_OPEN">APP_OPEN</a>
          */
@@ -194,7 +204,6 @@ public final class Analytic {
          * </p>
          *
          * @param params Additional parameter to track with event
-         * @see Analytic#track(String, Bundle)
          * @see FirebaseAnalytics.Event#TUTORIAL_BEGIN
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#TUTORIAL_BEGIN">TUTORIAL_BEGIN</a>
          */

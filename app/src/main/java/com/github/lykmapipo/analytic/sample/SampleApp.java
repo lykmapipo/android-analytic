@@ -17,8 +17,5 @@ public class SampleApp extends Application {
         //initialize analytic
         Analytic.initialize(getApplicationContext());
 
-        //track app opened
-        Analytic.App.opened();
-
     }
 }
