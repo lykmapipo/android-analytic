@@ -2,6 +2,7 @@ package com.github.lykmapipo.analytic;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -9,7 +10,8 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 /**
  * Analytic
  * <p>
- * Simplified wrapper for {@link com.google.firebase.analytics.FirebaseAnalytics}
+ * Simplified wrapper for {@link com.google.firebase.analytics.FirebaseAnalytics} to provide
+ * utility helpers
  * </p>
  *
  * @author lally elias<lallyelias87@gmail.com>
@@ -23,10 +25,10 @@ public final class Analytic {
     private static FirebaseAnalytics analytics;
 
     /**
-     * Initialize
+     * Initialize analytic
      *
      * @param context {@link Context}
-     * @return {@link Analytic}
+     * @return {@link FirebaseAnalytics}
      */
     @RequiresPermission(
             allOf = {
@@ -35,27 +37,20 @@ public final class Analytic {
                     "android.permission.WAKE_LOCK"
             }
     )
-    public static synchronized void initialize(@NonNull Context context) {
+    public static synchronized FirebaseAnalytics initialize(@NonNull Context context) {
         if (analytics == null) {
             analytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
         }
+        return analytics;
     }
 
     /**
-     * Initialize
+     * Obtain current instance of {@link FirebaseAnalytics}
      *
-     * @param context {@link Context}
-     * @return {@link Analytic}
+     * @return {@link FirebaseAnalytics}
      */
-    @RequiresPermission(
-            allOf = {
-                    "android.permission.INTERNET",
-                    "android.permission.ACCESS_NETWORK_STATE",
-                    "android.permission.WAKE_LOCK"
-            }
-    )
-    public static synchronized FirebaseAnalytics getInstance(@NonNull Context context) {
-        initialize(context);
+    @Nullable
+    public static synchronized FirebaseAnalytics getInstance() {
         return analytics;
     }
 }
