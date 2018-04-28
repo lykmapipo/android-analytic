@@ -56,6 +56,8 @@ public final class Analytic {
             }
     )
     public static synchronized FirebaseAnalytics initialize(@NonNull Context context) {
+
+        //instantiate if not exist
         if (analytics == null) {
             analytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
         }
@@ -139,5 +141,35 @@ public final class Analytic {
         //track event
         track(event.getName(), params);
 
+    }
+
+
+    /**
+     * Track app events
+     */
+    public static class App {
+        /**
+         * Logs an app open event. Events with the same name must have the same parameters.
+         *
+         * @param params Additional parameter to track with event
+         * @see Analytic#track(String, Bundle)
+         */
+        public static synchronized void opened(@Nullable Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.APP_OPEN;
+
+            track(eventName, params);
+        }
+
+        /**
+         * Logs an app open event. Events with the same name must have the same parameters.
+         *
+         * @see Analytic.App#opened(Bundle)
+         * @see Analytic#track(String, Bundle)
+         */
+        public static synchronized void opened() {
+            Bundle params = new Bundle();
+            opened(params);
+        }
     }
 }

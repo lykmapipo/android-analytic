@@ -114,6 +114,30 @@ public class AnalyticTest {
         assertThat(exception, is(equalTo(null)));
     }
 
+    @Test
+    public void shouldBeAbleToTrackAppOpened_01() {
+        Exception exception = null;
+        try {
+            Analytic.App.opened();
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackAppOpened_02() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.App.opened(params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
     @After
     public void clean() {
         context = null;

@@ -41,10 +41,10 @@ public class SampleApp extends Application{
 }
 ```
 
-In your components start tracking and log events
+In your `components` start tracking and log events
 
 ```java
-
+Analytic.Ecommerce.track(item);
 ```
 
 ## Android API

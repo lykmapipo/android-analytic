@@ -13,6 +13,12 @@ public class SampleApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //initialize analytic
         Analytic.initialize(getApplicationContext());
+
+        //track app opened
+        Analytic.App.opened();
+
     }
 }
