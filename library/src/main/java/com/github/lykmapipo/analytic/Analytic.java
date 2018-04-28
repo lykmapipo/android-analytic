@@ -1,9 +1,11 @@
 package com.github.lykmapipo.analytic;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
+import android.text.TextUtils;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -52,5 +54,43 @@ public final class Analytic {
     @Nullable
     public static synchronized FirebaseAnalytics getInstance() {
         return analytics;
+    }
+
+    /**
+     * Logs an app event. Events with the same name must have the same parameters.
+     *
+     * @param eventName   The name of the event
+     * @param eventParams The map of event parameters
+     * @see FirebaseAnalytics#logEvent(String, Bundle)
+     */
+    public static synchronized void track(@NonNull String eventName, @Nullable Bundle eventParams) {
+        //ensure analytic and event name
+        boolean canTrack = (analytics != null && !TextUtils.isEmpty(eventName));
+
+        if (canTrack) {
+            analytics.logEvent(eventName, eventParams);
+        }
+
+        //TODO log error on debug
+    }
+
+    /**
+     * Logs an app event. Events with the same name must have the same parameters.
+     *
+     * @param event The event to track
+     * @see FirebaseAnalytics#logEvent(String, Bundle)
+     */
+    public static synchronized void track(@NonNull Trackable event) {
+
+        //prepare event name
+        String eventName = event.getEventName();
+
+        //prepare event params
+        Bundle eventParams = new Bundle();
+        eventParams.putAll(event.getEventParams());
+
+        //track event
+        track(eventName, eventParams);
+
     }
 }
