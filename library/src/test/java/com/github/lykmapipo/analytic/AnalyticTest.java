@@ -1,6 +1,7 @@
 package com.github.lykmapipo.analytic;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -11,6 +12,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
+
+import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -27,6 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Config(sdk = 23)
 @RunWith(RobolectricTestRunner.class)
 public class AnalyticTest {
+    String TEST_EVENT = "test_event";
     private Context context;
 
     @Before
@@ -67,6 +71,46 @@ public class AnalyticTest {
         assertThat(instance_2, is(instanceOf(FirebaseAnalytics.class)));
 
         assertThat(instance_1, is(sameInstance(instance_2)));
+    }
+
+    @Test
+    public void shouldBeAbleToGetDefaultParameters() {
+        Bundle params = Analytic.getDefaultEventParams();
+
+        //assert timezone
+        String timezone = params.getString(Analytic.PARAM_TIMEZONE);
+        assertThat(timezone, is(not(equalTo(null))));
+
+        //assert time
+        Long time = params.getLong(Analytic.PARAM_TIME);
+        assertThat(time, is(not(equalTo(null))));
+    }
+
+    @Test
+    public void shouldBeAbleToTrack_01() {
+        Exception exception = null;
+        try {
+            Analytic.track(TEST_EVENT, null);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrack_02() {
+        Exception exception = null;
+        try {
+            SimpleEvent event =
+                    new SimpleEvent()
+                            .setName("SIMPLE_EVENT")
+                            .setTime(new Date())
+                            .setParams("SIMPLE", "SIMPLE");
+            Analytic.track(event);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
     }
 
     @After

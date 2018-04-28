@@ -9,6 +9,8 @@ import android.text.TextUtils;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.util.Date;
+
 /**
  * Analytic
  * <p>
@@ -22,9 +24,23 @@ import com.google.firebase.analytics.FirebaseAnalytics;
  */
 public final class Analytic {
     /**
+     * Analytic parameters
+     */
+    public static final String PARAM_TIMEZONE = "timezone";
+    public static final String PARAM_TIME = "time";
+    //TODO add other default parameters
+    //TODO support event name prefix
+    //TODO support event param name prefix
+
+    /**
      * {@link FirebaseAnalytics} instance
      */
     private static FirebaseAnalytics analytics;
+
+    /**
+     * Default event parameter
+     */
+    private static Bundle defaultEventParams = new Bundle();
 
     /**
      * Initialize analytic
@@ -43,6 +59,10 @@ public final class Analytic {
         if (analytics == null) {
             analytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
         }
+
+        //set default event parameters
+        defaultEventParams.putString(PARAM_TIMEZONE, Utils.getTimezone());
+
         return analytics;
     }
 
@@ -57,6 +77,20 @@ public final class Analytic {
     }
 
     /**
+     * Derive default analytic params
+     *
+     * @return {@link Bundle}
+     */
+    public static synchronized Bundle getDefaultEventParams() {
+        Bundle params = new Bundle();
+        params.putAll(defaultEventParams);
+
+        params.putLong(PARAM_TIME, new Date().getTime());
+
+        return params;
+    }
+
+    /**
      * Logs an app event. Events with the same name must have the same parameters.
      *
      * @param eventName   The name of the event
@@ -66,6 +100,12 @@ public final class Analytic {
     public static synchronized void track(@NonNull String eventName, @Nullable Bundle eventParams) {
         //ensure analytic and event name
         boolean canTrack = (analytics != null && !TextUtils.isEmpty(eventName));
+
+        //prepare event parameters
+        Bundle params = getDefaultEventParams();
+        if (eventParams != null) {
+            params.putAll(eventParams);
+        }
 
         if (canTrack) {
             analytics.logEvent(eventName, eventParams);
@@ -80,17 +120,24 @@ public final class Analytic {
      * @param event The event to track
      * @see FirebaseAnalytics#logEvent(String, Bundle)
      */
-    public static synchronized void track(@NonNull Trackable event) {
+    public static synchronized void track(@NonNull Event event) {
+        //prepare event data
+        Bundle params = new Bundle();
 
-        //prepare event name
-        String eventName = event.getEventName();
+        //set event time
+        Date eventTime = event.getTime();
+        if (eventTime != null) {
+            params.putLong(PARAM_TIME, eventTime.getTime());
+        }
 
-        //prepare event params
-        Bundle eventParams = new Bundle();
-        eventParams.putAll(event.getEventParams());
+        //obtain event params
+        Bundle eventParams = event.getParams();
+        if (eventParams != null) {
+            params.putAll(eventParams);
+        }
 
         //track event
-        track(eventName, eventParams);
+        track(event.getName(), params);
 
     }
 }
