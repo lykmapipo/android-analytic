@@ -31,6 +31,10 @@ public final class Analytic {
     //TODO add other default parameters
     //TODO support event name prefix
     //TODO support event param name prefix
+    //TODO track if user signup
+    //TODO track if user login
+    //TODO track android(medium/channel/device)
+    //TODO add default signin/login method
 
     /**
      * {@link FirebaseAnalytics} instance
@@ -187,6 +191,55 @@ public final class Analytic {
         public static synchronized void opened() {
             Bundle params = new Bundle();
             opened(params);
+        }
+
+        /**
+         * Logs user signed up event
+         * <p>
+         * This event indicates that a user has signed up for an account in your app.
+         * The parameter signifies the method by which the user signed up.
+         * Use this event to understand the different behaviors between logged in and
+         * logged out users
+         * </p>
+         *
+         * @see FirebaseAnalytics.Event#SIGN_UP
+         * @see FirebaseAnalytics.Param#METHOD
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#SIGN_UP">SIGN_UP</a>
+         */
+        public static synchronized void signedUp(@NonNull String method, @Nullable Bundle params) {
+
+            if (!TextUtils.isEmpty(method)) {
+
+                String eventName = FirebaseAnalytics.Event.SIGN_UP;
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.METHOD, method);
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                track(eventName, bundle);
+            }
+        }
+
+        /**
+         * Logs user signed up event
+         * <p>
+         * This event indicates that a user has signed up for an account in your app.
+         * The parameter signifies the method by which the user signed up.
+         * Use this event to understand the different behaviors between logged in and
+         * logged out users
+         * </p>
+         *
+         * @see Analytic.App#signedUp(String, Bundle)
+         * @see FirebaseAnalytics.Event#SIGN_UP
+         * @see FirebaseAnalytics.Param#METHOD
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#SIGN_UP">SIGN_UP</a>
+         */
+        public static synchronized void signedUp(@NonNull String method) {
+            Bundle params = new Bundle();
+            signedUp(method, params);
         }
     }
 

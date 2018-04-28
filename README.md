@@ -45,9 +45,13 @@ In your `android components` start tracking and log events
 
 ```java
 Analytic.App.opened();
+Analytic.App.signedIn("google");
+Analytic.App.loggedIn("google");
+
 
 Analytic.Tutorial.begin();
 Analytic.Tutorial.complete();
+
 
 ```
 
