@@ -100,16 +100,19 @@ public final class Analytic {
      * @see FirebaseAnalytics#logEvent(String, Bundle)
      */
     public static synchronized void track(@NonNull String eventName, @Nullable Bundle eventParams) {
+
         //ensure analytic and event name
         boolean canTrack = (analytics != null && !TextUtils.isEmpty(eventName));
 
-        //prepare event parameters
-        Bundle params = getDefaultEventParams();
-        if (eventParams != null) {
-            params.putAll(eventParams);
-        }
-
         if (canTrack) {
+
+            //prepare event parameters
+            Bundle params = getDefaultEventParams();
+            if (eventParams != null) {
+                params.putAll(eventParams);
+            }
+
+            //send event to firabase analytics
             analytics.logEvent(eventName, eventParams);
         }
 
@@ -153,6 +156,8 @@ public final class Analytic {
          *
          * @param params Additional parameter to track with event
          * @see Analytic#track(String, Bundle)
+         * @see FirebaseAnalytics.Event#APP_OPEN
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#APP_OPEN">APP_OPEN</a>
          */
         public static synchronized void opened(@Nullable Bundle params) {
 
@@ -166,6 +171,8 @@ public final class Analytic {
          *
          * @see Analytic.App#opened(Bundle)
          * @see Analytic#track(String, Bundle)
+         * @see FirebaseAnalytics.Event#APP_OPEN
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#APP_OPEN">APP_OPEN</a>
          */
         public static synchronized void opened() {
             Bundle params = new Bundle();
