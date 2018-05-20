@@ -32,6 +32,7 @@ public class Analytic {
     public static final String PARAM_TIME = "time"; // event time
     public static final String PARAM_MEDIUM = "medium"; //event medium(or channel)
     public static final String VALUE_MEDIUM_ANDROID = "android";
+    public static final String VALUE_DEFAULT_CURRENCY = "USD";
 
     /**
      * {@link FirebaseAnalytics} instance
@@ -389,6 +390,7 @@ public class Analytic {
         }
     }
 
+
     /**
      * Track view events
      */
@@ -579,10 +581,9 @@ public class Analytic {
 
                 //prepare parameters
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
 
                 //track
-                item(bundle);
+                item(name, bundle);
             }
 
         }
@@ -666,5 +667,184 @@ public class Analytic {
             }
 
         }
+    }
+
+    /**
+     * Track ecommerce events
+     */
+    public static class Ecommerce {
+
+        //WISHLIST
+
+        /**
+         * E-Commerce Add To Wishlist event.
+         * This event signifies that an item was added to a wishlist.
+         * Use this event to identify popular gift items in your app.
+         *
+         * @see FirebaseAnalytics.Event#ADD_TO_WISHLIST
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ADD_TO_WISHLIST">ADD_TO_WISHLIST</a>
+         */
+        public static synchronized void addToWishList(@NonNull Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.ADD_TO_WISHLIST;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            if (params != null) {
+                bundle.putAll(params);
+            }
+
+            //track
+            track(eventName, bundle);
+
+        }
+
+
+        //CHECKOUT
+
+        /**
+         * E-Commerce Begin Checkout event.
+         * This event signifies that a user has begun the process of checking out.
+         *
+         * @see FirebaseAnalytics.Event#BEGIN_CHECKOUT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#BEGIN_CHECKOUT">BEGIN_CHECKOUT</a>
+         */
+        public static synchronized void beginCheckout(@NonNull Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.BEGIN_CHECKOUT;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            if (params != null) {
+                bundle.putAll(params);
+            }
+
+            //track
+            track(eventName, bundle);
+
+        }
+
+        /**
+         * E-Commerce Checkout Progress event.
+         *
+         * @see FirebaseAnalytics.Event#CHECKOUT_PROGRESS
+         * @see FirebaseAnalytics.Param#CHECKOUT_STEP
+         * @see FirebaseAnalytics.Param#CHECKOUT_OPTION
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#CHECKOUT_PROGRESS">CHECKOUT_PROGRESS</a>
+         */
+        public static synchronized void checkoutProgress(@NonNull Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.CHECKOUT_PROGRESS;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            if (params != null) {
+                bundle.putAll(params);
+            }
+
+            //track
+            track(eventName, bundle);
+
+        }
+
+
+        //PURCHASE
+
+
+        /**
+         * E-Commerce Purchase event.
+         * This event signifies that an item was purchased by a user.
+         *
+         * @see FirebaseAnalytics.Event#ECOMMERCE_PURCHASE
+         * @see FirebaseAnalytics.Param#CURRENCY
+         * @see FirebaseAnalytics.Param#VALUE
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ECOMMERCE_PURCHASE">ECOMMERCE_PURCHASE</a>
+         */
+        public static synchronized void purchase(@NonNull Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.ECOMMERCE_PURCHASE;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+
+            //ensure defaults
+            bundle.putString(FirebaseAnalytics.Param.CURRENCY, VALUE_DEFAULT_CURRENCY);
+
+            if (params != null) {
+                bundle.putAll(params);
+            }
+
+            //track
+            track(eventName, bundle);
+
+        }
+
+
+        /**
+         * E-Commerce Purchase event.
+         * This event signifies that an item was purchased by a user.
+         *
+         * @see FirebaseAnalytics.Event#ECOMMERCE_PURCHASE
+         * @see FirebaseAnalytics.Param#CURRENCY
+         * @see FirebaseAnalytics.Param#VALUE
+         * @see Analytic.Ecommerce#purchase(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ECOMMERCE_PURCHASE">ECOMMERCE_PURCHASE</a>
+         */
+        public static synchronized void purchase(@NonNull Double value, @NonNull String currency, @Nullable Bundle params) {
+
+            boolean canTrack =
+                    (value != null && !Utils.isEmpty(currency));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putDouble(FirebaseAnalytics.Param.VALUE, value);
+                bundle.putString(FirebaseAnalytics.Param.CURRENCY, currency);
+
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                //track
+                purchase(bundle);
+
+            }
+
+        }
+
+        /**
+         * E-Commerce Purchase event.
+         * This event signifies that an item was purchased by a user.
+         *
+         * @see FirebaseAnalytics.Event#ECOMMERCE_PURCHASE
+         * @see FirebaseAnalytics.Param#CURRENCY
+         * @see FirebaseAnalytics.Param#VALUE
+         * @see Analytic.Ecommerce#purchase(Double, String, Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ECOMMERCE_PURCHASE">ECOMMERCE_PURCHASE</a>
+         */
+        public static synchronized void purchase(@NonNull Double value, @NonNull String currency) {
+
+            boolean canTrack =
+                    (value != null && !Utils.isEmpty(currency));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+
+                //track
+                purchase(value, currency, bundle);
+
+            }
+
+        }
+
     }
 }

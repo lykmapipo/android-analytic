@@ -32,6 +32,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class AnalyticTest {
     private String TEST_EVENT = "test_event";
     private String TEST_PARAM = "test_param";
+    private String TEST_CURRENCY = "USD";
+    private Double TEST_VALUE = 20.20;
     private Context context;
 
     @Before
@@ -339,6 +341,42 @@ public class AnalyticTest {
         Exception exception = null;
         try {
             Analytic.View.list(TEST_PARAM);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+
+    @Test
+    public void shouldBeAbleToTrackEcommercePurchase_01() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            Analytic.Ecommerce.purchase(params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackEcommercePurchase_02() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            Analytic.Ecommerce.purchase(TEST_VALUE, TEST_CURRENCY, params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackEcommercePurchase_03() {
+        Exception exception = null;
+        try {
+            Analytic.Ecommerce.purchase(TEST_VALUE, TEST_CURRENCY);
         } catch (Exception e) {
             exception = e;
         }
