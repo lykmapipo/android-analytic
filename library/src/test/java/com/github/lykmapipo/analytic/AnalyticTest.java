@@ -34,6 +34,7 @@ public class AnalyticTest {
     private String TEST_PARAM = "test_param";
     private String TEST_CURRENCY = "USD";
     private Double TEST_VALUE = 20.20;
+    private Long TEST_LONG = 2L;
     private Context context;
 
     @Before
@@ -189,6 +190,17 @@ public class AnalyticTest {
     }
 
     @Test
+    public void shouldBeAbleToAppShare_03() {
+        Exception exception = null;
+        try {
+            Analytic.App.share(TEST_PARAM, TEST_PARAM, TEST_PARAM);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
     public void shouldBeAbleToTrackTutorialBegin_01() {
         Exception exception = null;
         try {
@@ -287,30 +299,6 @@ public class AnalyticTest {
     }
 
     @Test
-    public void shouldBeAbleToTrackItemView_05() {
-        Exception exception = null;
-        try {
-            Bundle params = new Bundle();
-            params.putString(TEST_PARAM, TEST_PARAM);
-            Analytic.View.item(TEST_PARAM, params);
-        } catch (Exception e) {
-            exception = e;
-        }
-        assertThat(exception, is(equalTo(null)));
-    }
-
-    @Test
-    public void shouldBeAbleToTrackItemView_06() {
-        Exception exception = null;
-        try {
-            Analytic.View.item(TEST_PARAM);
-        } catch (Exception e) {
-            exception = e;
-        }
-        assertThat(exception, is(equalTo(null)));
-    }
-
-    @Test
     public void shouldBeAbleToTrackItemListView_01() {
         Exception exception = null;
         try {
@@ -341,6 +329,50 @@ public class AnalyticTest {
         Exception exception = null;
         try {
             Analytic.View.list(TEST_PARAM);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackAddToWishList_03() {
+        Exception exception = null;
+        try {
+            Analytic.Ecommerce.addToWishList(TEST_PARAM, TEST_PARAM, TEST_PARAM);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackAddToWishList_04() {
+        Exception exception = null;
+        try {
+            Analytic.Ecommerce.addToWishList(TEST_PARAM, TEST_PARAM);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackBeginCheckout_02() {
+        Exception exception = null;
+        try {
+            Analytic.Ecommerce.beginCheckout();
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackCheckoutProgress_03() {
+        Exception exception = null;
+        try {
+            Analytic.Ecommerce.checkoutProgress(TEST_LONG, TEST_PARAM);
         } catch (Exception e) {
             exception = e;
         }

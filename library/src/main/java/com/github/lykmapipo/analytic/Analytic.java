@@ -159,6 +159,8 @@ public class Analytic {
      * Track app events
      */
     public static class App {
+        //OPEN
+
         /**
          * Logs an app open event
          * <p>
@@ -179,6 +181,7 @@ public class Analytic {
             track(eventName, params);
         }
 
+
         /**
          * Logs an app open event
          * <p>
@@ -197,6 +200,29 @@ public class Analytic {
             opened(params);
         }
 
+
+        //LOGIN
+
+        /**
+         * Logs user logged in event
+         *
+         * @see FirebaseAnalytics.Event#LOGIN
+         * @see FirebaseAnalytics.Param#METHOD
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#LOGIN">LOGIN</a>
+         */
+        public static synchronized void loggedIn(@NonNull Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.LOGIN;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            if (params != null) {
+                bundle.putAll(params);
+            }
+
+            track(eventName, bundle);
+        }
+
         /**
          * Logs user logged in event
          *
@@ -208,8 +234,6 @@ public class Analytic {
 
             if (!Utils.isEmpty(method)) {
 
-                String eventName = FirebaseAnalytics.Event.LOGIN;
-
                 //prepare parameters
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.METHOD, method);
@@ -217,9 +241,10 @@ public class Analytic {
                     bundle.putAll(params);
                 }
 
-                track(eventName, bundle);
+                loggedIn(bundle);
             }
         }
+
 
         /**
          * Logs user logged in event
@@ -234,6 +259,35 @@ public class Analytic {
             loggedIn(method, params);
         }
 
+
+        //SIGNUP
+
+        /**
+         * Logs user signed up event
+         * <p>
+         * This event indicates that a user has signed up for an account in your app.
+         * The parameter signifies the method by which the user signed up.
+         * Use this event to understand the different behaviors between logged in and
+         * logged out users
+         * </p>
+         *
+         * @see FirebaseAnalytics.Event#SIGN_UP
+         * @see FirebaseAnalytics.Param#METHOD
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#SIGN_UP">SIGN_UP</a>
+         */
+        public static synchronized void signedUp(@NonNull Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.SIGN_UP;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            if (params != null) {
+                bundle.putAll(params);
+            }
+
+            track(eventName, bundle);
+
+        }
 
         /**
          * Logs user signed up event
@@ -252,8 +306,6 @@ public class Analytic {
 
             if (!Utils.isEmpty(method)) {
 
-                String eventName = FirebaseAnalytics.Event.SIGN_UP;
-
                 //prepare parameters
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.METHOD, method);
@@ -261,7 +313,8 @@ public class Analytic {
                     bundle.putAll(params);
                 }
 
-                track(eventName, bundle);
+                signedUp(bundle);
+
             }
         }
 
@@ -285,6 +338,9 @@ public class Analytic {
             signedUp(method, params);
         }
 
+
+        //SHARE
+
         /**
          * Logs share event
          *
@@ -294,22 +350,76 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#CONTENT_TYPE
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#SHARE">SHARE</a>
          */
-        public static synchronized void share(@NonNull String method, @Nullable Bundle params) {
+        public static synchronized void share(@NonNull Bundle params) {
             //TODO ensure content_type & item_id
-            if (!Utils.isEmpty(method)) {
+            String eventName = FirebaseAnalytics.Event.SHARE;
 
-                String eventName = FirebaseAnalytics.Event.SHARE;
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            if (params != null) {
+                bundle.putAll(params);
+            }
+
+            track(eventName, bundle);
+
+        }
+
+        /**
+         * Logs share event
+         *
+         * @see FirebaseAnalytics.Event#SHARE
+         * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#SHARE">SHARE</a>
+         */
+        public static synchronized void share(
+                @NonNull String method, @NonNull String itemId,
+                @NonNull String contentType, @Nullable Bundle params) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(method) && !Utils.isEmpty(itemId) && !Utils.isEmpty(contentType));
+
+            if (canTrack) {
 
                 //prepare parameters
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.METHOD, method);
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, itemId);
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, contentType);
                 if (params != null) {
                     bundle.putAll(params);
                 }
 
-                track(eventName, bundle);
+                share(bundle);
             }
         }
+
+        /**
+         * Logs share event
+         *
+         * @see FirebaseAnalytics.Event#SHARE
+         * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#SHARE">SHARE</a>
+         */
+        public static synchronized void share(
+                @NonNull String method, @NonNull String itemId, @NonNull String contentType) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(method) && !Utils.isEmpty(itemId) && !Utils.isEmpty(contentType));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+
+                share(method, itemId, contentType, bundle);
+
+            }
+        }
+
     }
 
 
@@ -438,7 +548,9 @@ public class Analytic {
          * @see Analytic.View#item(Bundle)
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
          */
-        public static synchronized void item(@NonNull String id, @NonNull String name, @NonNull String category, @Nullable Bundle params) {
+        public static synchronized void item(
+                @NonNull String id, @NonNull String name,
+                @NonNull String category, @Nullable Bundle params) {
 
             boolean canTrack =
                     (!Utils.isEmpty(id) && !Utils.isEmpty(name) && !Utils.isEmpty(category));
@@ -473,7 +585,8 @@ public class Analytic {
          * @see Analytic.View#item(Bundle)
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
          */
-        public static synchronized void item(@NonNull String name, @NonNull String category, @Nullable Bundle params) {
+        public static synchronized void item(
+                @NonNull String name, @NonNull String category, @Nullable Bundle params) {
 
             boolean canTrack =
                     (!Utils.isEmpty(name) && !Utils.isEmpty(category));
@@ -482,14 +595,12 @@ public class Analytic {
 
                 //prepare parameters
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
                 if (params != null) {
                     bundle.putAll(params);
                 }
 
                 //track
-                item(bundle);
+                item(name, name, category, bundle);
             }
 
         }
@@ -516,74 +627,9 @@ public class Analytic {
 
                 //prepare parameters
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
 
                 //track
-                item(bundle);
-            }
-
-        }
-
-
-        /**
-         * View Item event. This event signifies that some content was shown to the user.
-         * This content may be a product, a webpage or just a simple image or text.
-         * Use the appropriate parameters to contextualize the event.
-         * Use this event to discover the most popular items viewed in your app.
-         *
-         * @see FirebaseAnalytics.Event#VIEW_ITEM
-         * @see FirebaseAnalytics.Param#ITEM_ID
-         * @see FirebaseAnalytics.Param#ITEM_NAME
-         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
-         * @see Analytic.View#item(Bundle)
-         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
-         */
-        public static synchronized void item(@NonNull String name, @Nullable Bundle params) {
-
-            boolean canTrack =
-                    (!Utils.isEmpty(name));
-
-            if (canTrack) {
-
-                //prepare parameters
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-                if (params != null) {
-                    bundle.putAll(params);
-                }
-
-                //track
-                item(bundle);
-            }
-
-        }
-
-        /**
-         * View Item event. This event signifies that some content was shown to the user.
-         * This content may be a product, a webpage or just a simple image or text.
-         * Use the appropriate parameters to contextualize the event.
-         * Use this event to discover the most popular items viewed in your app.
-         *
-         * @see FirebaseAnalytics.Event#VIEW_ITEM
-         * @see FirebaseAnalytics.Param#ITEM_ID
-         * @see FirebaseAnalytics.Param#ITEM_NAME
-         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
-         * @see Analytic.View#item(Bundle)
-         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
-         */
-        public static synchronized void item(@NonNull String name) {
-
-            boolean canTrack =
-                    (!Utils.isEmpty(name));
-
-            if (canTrack) {
-
-                //prepare parameters
-                Bundle bundle = new Bundle();
-
-                //track
-                item(name, bundle);
+                item(name, category, bundle);
             }
 
         }
@@ -685,6 +731,7 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#ITEM_ID
          * @see FirebaseAnalytics.Param#ITEM_NAME
          * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see FirebaseAnalytics.Param#QUANTITY
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ADD_TO_WISHLIST">ADD_TO_WISHLIST</a>
          */
         public static synchronized void addToWishList(@NonNull Bundle params) {
@@ -693,12 +740,119 @@ public class Analytic {
 
             //prepare parameters
             Bundle bundle = new Bundle();
+
+            //ensure defaults
+            bundle.putLong(FirebaseAnalytics.Param.QUANTITY, 1);
+
             if (params != null) {
                 bundle.putAll(params);
             }
 
             //track
             track(eventName, bundle);
+
+        }
+
+
+        /**
+         * E-Commerce Add To Wishlist event.
+         * This event signifies that an item was added to a wishlist.
+         * Use this event to identify popular gift items in your app.
+         *
+         * @see FirebaseAnalytics.Event#ADD_TO_WISHLIST
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see FirebaseAnalytics.Param#QUANTITY
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ADD_TO_WISHLIST">ADD_TO_WISHLIST</a>
+         */
+        public static synchronized void addToWishList(
+                @NonNull String itemId, @NonNull String itemName,
+                @NonNull String itemCategory, @NonNull Long quantity, @Nullable Bundle params) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(itemName) && !Utils.isEmpty(itemName)
+                            && !Utils.isEmpty(itemCategory) && quantity != null);
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+
+                //ensure defaults
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, itemId);
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, itemName);
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, itemCategory);
+                bundle.putLong(FirebaseAnalytics.Param.QUANTITY, quantity);
+
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                //track
+                addToWishList(bundle);
+
+            }
+
+        }
+
+
+        /**
+         * E-Commerce Add To Wishlist event.
+         * This event signifies that an item was added to a wishlist.
+         * Use this event to identify popular gift items in your app.
+         *
+         * @see FirebaseAnalytics.Event#ADD_TO_WISHLIST
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see FirebaseAnalytics.Param#QUANTITY
+         * @see Analytic.Ecommerce#addToWishList(String, String, String, Long, Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ADD_TO_WISHLIST">ADD_TO_WISHLIST</a>
+         */
+        public static synchronized void addToWishList(
+                @NonNull String itemId, @NonNull String itemName, @NonNull String itemCategory) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(itemName) && !Utils.isEmpty(itemName)
+                            && !Utils.isEmpty(itemCategory));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+
+                //track
+                addToWishList(itemId, itemName, itemCategory, 1L, bundle);
+
+            }
+
+        }
+
+
+        /**
+         * E-Commerce Add To Wishlist event.
+         * This event signifies that an item was added to a wishlist.
+         * Use this event to identify popular gift items in your app.
+         *
+         * @see FirebaseAnalytics.Event#ADD_TO_WISHLIST
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see FirebaseAnalytics.Param#QUANTITY
+         * @see Analytic.Ecommerce#addToWishList(String, String, String)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ADD_TO_WISHLIST">ADD_TO_WISHLIST</a>
+         */
+        public static synchronized void addToWishList(
+                @NonNull String itemName, @NonNull String itemCategory) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(itemName) && !Utils.isEmpty(itemCategory));
+
+            //track
+            if (canTrack) {
+                addToWishList(itemName, itemName, itemCategory);
+            }
 
         }
 
@@ -730,6 +884,29 @@ public class Analytic {
 
         }
 
+
+        /**
+         * E-Commerce Begin Checkout event.
+         * This event signifies that a user has begun the process of checking out.
+         *
+         * @see FirebaseAnalytics.Event#BEGIN_CHECKOUT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see Analytic.Ecommerce#beginCheckout(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#BEGIN_CHECKOUT">BEGIN_CHECKOUT</a>
+         */
+        public static synchronized void beginCheckout() {
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+
+            //track
+            beginCheckout(bundle);
+
+        }
+
+
         /**
          * E-Commerce Checkout Progress event.
          *
@@ -750,6 +927,64 @@ public class Analytic {
 
             //track
             track(eventName, bundle);
+
+        }
+
+
+        /**
+         * E-Commerce Checkout Progress event.
+         *
+         * @see FirebaseAnalytics.Event#CHECKOUT_PROGRESS
+         * @see FirebaseAnalytics.Param#CHECKOUT_STEP
+         * @see FirebaseAnalytics.Param#CHECKOUT_OPTION
+         * @see Analytic.Ecommerce#checkoutProgress(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#CHECKOUT_PROGRESS">CHECKOUT_PROGRESS</a>
+         */
+        public static synchronized void checkoutProgress(
+                @NonNull Long step, @NonNull String option, @Nullable Bundle params) {
+
+            boolean canTrack =
+                    (step != null && !Utils.isEmpty(option));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                //track
+                checkoutProgress(bundle);
+
+            }
+
+        }
+
+        /**
+         * E-Commerce Checkout Progress event.
+         *
+         * @see FirebaseAnalytics.Event#CHECKOUT_PROGRESS
+         * @see FirebaseAnalytics.Param#CHECKOUT_STEP
+         * @see FirebaseAnalytics.Param#CHECKOUT_OPTION
+         * @see Analytic.Ecommerce#checkoutProgress(Long, String, Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#CHECKOUT_PROGRESS">CHECKOUT_PROGRESS</a>
+         */
+        public static synchronized void checkoutProgress(
+                @NonNull Long step, @NonNull String option) {
+
+            boolean canTrack =
+                    (step != null && !Utils.isEmpty(option));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+
+                //track
+                checkoutProgress(step, option, bundle);
+
+            }
 
         }
 
@@ -796,7 +1031,8 @@ public class Analytic {
          * @see Analytic.Ecommerce#purchase(Bundle)
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ECOMMERCE_PURCHASE">ECOMMERCE_PURCHASE</a>
          */
-        public static synchronized void purchase(@NonNull Double value, @NonNull String currency, @Nullable Bundle params) {
+        public static synchronized void purchase(
+                @NonNull Double value, @NonNull String currency, @Nullable Bundle params) {
 
             boolean canTrack =
                     (value != null && !Utils.isEmpty(currency));
@@ -819,6 +1055,7 @@ public class Analytic {
 
         }
 
+
         /**
          * E-Commerce Purchase event.
          * This event signifies that an item was purchased by a user.
@@ -829,7 +1066,8 @@ public class Analytic {
          * @see Analytic.Ecommerce#purchase(Double, String, Bundle)
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ECOMMERCE_PURCHASE">ECOMMERCE_PURCHASE</a>
          */
-        public static synchronized void purchase(@NonNull Double value, @NonNull String currency) {
+        public static synchronized void purchase(
+                @NonNull Double value, @NonNull String currency) {
 
             boolean canTrack =
                     (value != null && !Utils.isEmpty(currency));
