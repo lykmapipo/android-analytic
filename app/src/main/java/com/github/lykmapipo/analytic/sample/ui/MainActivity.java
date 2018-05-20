@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //log event
-                Analytic.App.opened();
+                Analytic.Ecommerce.purchase(20.20, "USD");
             }
         });
 
