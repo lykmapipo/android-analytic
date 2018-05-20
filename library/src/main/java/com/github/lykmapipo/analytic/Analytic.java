@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
-import android.text.TextUtils;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -22,20 +21,17 @@ import java.util.Date;
  * @version 0.1.0
  * @since 0.1.0
  */
-public final class Analytic {
+public class Analytic {
+
+    public static final String TAG = Analytic.class.getSimpleName();
+
     /**
-     * Analytic parameters
+     * Analytic parameters & values
      */
-    public static final String PARAM_TIMEZONE = "timezone";
-    public static final String PARAM_TIME = "time";
-    //TODO add other default parameters
-    //TODO support event name prefix
-    //TODO support event param name prefix
-    //TODO track if user signup
-    //TODO track if user login
-    //TODO track android(medium/channel/device)
-    //TODO add default signin/login method
-    //TODO make use of trackable
+    public static final String PARAM_TIMEZONE = "timezone"; //event timezone
+    public static final String PARAM_TIME = "time"; // event time
+    public static final String PARAM_MEDIUM = "medium"; //event medium(or channel)
+    public static final String VALUE_MEDIUM_ANDROID = "android";
 
     /**
      * {@link FirebaseAnalytics} instance
@@ -67,9 +63,6 @@ public final class Analytic {
             analytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
         }
 
-        //set default event parameters
-        defaultEventParams.putString(PARAM_TIMEZONE, Utils.getTimezone());
-
         return analytics;
     }
 
@@ -92,7 +85,9 @@ public final class Analytic {
         Bundle params = new Bundle();
         params.putAll(defaultEventParams);
 
-        params.putLong(PARAM_TIME, new Date().getTime());
+        params.putString(PARAM_TIMEZONE, Utils.getTimezone()); //timezone
+        params.putLong(PARAM_TIME, new Date().getTime()); //time
+        params.putString(PARAM_MEDIUM, VALUE_MEDIUM_ANDROID);//medium
 
         return params;
     }
@@ -107,7 +102,7 @@ public final class Analytic {
     public static synchronized void track(@NonNull String eventName, @Nullable Bundle eventParams) {
 
         //ensure analytic and event name
-        boolean canTrack = (analytics != null && !TextUtils.isEmpty(eventName));
+        boolean canTrack = (analytics != null && !Utils.isEmpty(eventName));
 
         if (canTrack) {
 
@@ -117,11 +112,18 @@ public final class Analytic {
                 params.putAll(eventParams);
             }
 
-            //send event to firabase analytics
-            analytics.logEvent(eventName, eventParams);
+            //send event to firebase analytics
+            analytics.logEvent(eventName, params);
+
+            //debug
+            Utils.d(TAG, params.toString());
         }
 
-        //TODO log error on debug
+        //notify not tracked
+        else {
+            Utils.d(TAG, "Fail to log event");
+        }
+
     }
 
     /**
@@ -203,7 +205,7 @@ public final class Analytic {
          */
         public static synchronized void loggedIn(@NonNull String method, @Nullable Bundle params) {
 
-            if (!TextUtils.isEmpty(method)) {
+            if (!Utils.isEmpty(method)) {
 
                 String eventName = FirebaseAnalytics.Event.LOGIN;
 
@@ -247,7 +249,7 @@ public final class Analytic {
          */
         public static synchronized void signedUp(@NonNull String method, @Nullable Bundle params) {
 
-            if (!TextUtils.isEmpty(method)) {
+            if (!Utils.isEmpty(method)) {
 
                 String eventName = FirebaseAnalytics.Event.SIGN_UP;
 
@@ -280,6 +282,32 @@ public final class Analytic {
         public static synchronized void signedUp(@NonNull String method) {
             Bundle params = new Bundle();
             signedUp(method, params);
+        }
+
+        /**
+         * Logs share event
+         *
+         * @see FirebaseAnalytics.Event#SHARE
+         * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#SHARE">SHARE</a>
+         */
+        public static synchronized void share(@NonNull String method, @Nullable Bundle params) {
+            //TODO ensure content_type & item_id
+            if (!Utils.isEmpty(method)) {
+
+                String eventName = FirebaseAnalytics.Event.SHARE;
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.METHOD, method);
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                track(eventName, bundle);
+            }
         }
     }
 
@@ -358,6 +386,285 @@ public final class Analytic {
         public static synchronized void complete() {
             Bundle params = new Bundle();
             complete(params);
+        }
+    }
+
+    /**
+     * Track view events
+     */
+    public static class View {
+
+        //ITEM
+
+        /**
+         * View Item event. This event signifies that some content was shown to the user.
+         * This content may be a product, a webpage or just a simple image or text.
+         * Use the appropriate parameters to contextualize the event.
+         * Use this event to discover the most popular items viewed in your app.
+         *
+         * @see FirebaseAnalytics.Event#VIEW_ITEM
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
+         */
+        public static synchronized void item(@NonNull Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.VIEW_ITEM;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            if (params != null) {
+                bundle.putAll(params);
+            }
+
+            //track
+            track(eventName, bundle);
+
+        }
+
+        /**
+         * View Item event. This event signifies that some content was shown to the user.
+         * This content may be a product, a webpage or just a simple image or text.
+         * Use the appropriate parameters to contextualize the event.
+         * Use this event to discover the most popular items viewed in your app.
+         *
+         * @see FirebaseAnalytics.Event#VIEW_ITEM
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see Analytic.View#item(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
+         */
+        public static synchronized void item(@NonNull String id, @NonNull String name, @NonNull String category, @Nullable Bundle params) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(id) && !Utils.isEmpty(name) && !Utils.isEmpty(category));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                //track
+                item(bundle);
+            }
+
+        }
+
+        /**
+         * View Item event. This event signifies that some content was shown to the user.
+         * This content may be a product, a webpage or just a simple image or text.
+         * Use the appropriate parameters to contextualize the event.
+         * Use this event to discover the most popular items viewed in your app.
+         *
+         * @see FirebaseAnalytics.Event#VIEW_ITEM
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see Analytic.View#item(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
+         */
+        public static synchronized void item(@NonNull String name, @NonNull String category, @Nullable Bundle params) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(name) && !Utils.isEmpty(category));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                //track
+                item(bundle);
+            }
+
+        }
+
+        /**
+         * View Item event. This event signifies that some content was shown to the user.
+         * This content may be a product, a webpage or just a simple image or text.
+         * Use the appropriate parameters to contextualize the event.
+         * Use this event to discover the most popular items viewed in your app.
+         *
+         * @see FirebaseAnalytics.Event#VIEW_ITEM
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see Analytic.View#item(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
+         */
+        public static synchronized void item(@NonNull String name, @NonNull String category) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(name) && !Utils.isEmpty(category));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
+
+                //track
+                item(bundle);
+            }
+
+        }
+
+
+        /**
+         * View Item event. This event signifies that some content was shown to the user.
+         * This content may be a product, a webpage or just a simple image or text.
+         * Use the appropriate parameters to contextualize the event.
+         * Use this event to discover the most popular items viewed in your app.
+         *
+         * @see FirebaseAnalytics.Event#VIEW_ITEM
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see Analytic.View#item(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
+         */
+        public static synchronized void item(@NonNull String name, @Nullable Bundle params) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(name));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                //track
+                item(bundle);
+            }
+
+        }
+
+        /**
+         * View Item event. This event signifies that some content was shown to the user.
+         * This content may be a product, a webpage or just a simple image or text.
+         * Use the appropriate parameters to contextualize the event.
+         * Use this event to discover the most popular items viewed in your app.
+         *
+         * @see FirebaseAnalytics.Event#VIEW_ITEM
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_NAME
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see Analytic.View#item(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM">VIEW_ITEM</a>
+         */
+        public static synchronized void item(@NonNull String name) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(name));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+
+                //track
+                item(bundle);
+            }
+
+        }
+
+
+        //LIST
+
+        /**
+         * View Item List event. Log this event when the user has been presented with a list of
+         * items of a certain category.
+         *
+         * @see FirebaseAnalytics.Event#VIEW_ITEM_LIST
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM_LIST">VIEW_ITEM_LIST</a>
+         */
+        public static synchronized void list(@NonNull Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.VIEW_ITEM_LIST;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            if (params != null) {
+                bundle.putAll(params);
+            }
+
+            //track
+            track(eventName, bundle);
+
+        }
+
+        /**
+         * View Item List event. Log this event when the user has been presented with a list of
+         * items of a certain category.
+         *
+         * @see FirebaseAnalytics.Event#VIEW_ITEM_LIST
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see Analytic.View#list(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM_LIST">VIEW_ITEM_LIST</a>
+         */
+        public static synchronized void list(@NonNull String category, @Nullable Bundle params) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(category));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
+                if (params != null) {
+                    bundle.putAll(params);
+                }
+
+                //track
+                list(bundle);
+            }
+
+        }
+
+        /**
+         * View Item List event. Log this event when the user has been presented with a list of
+         * items of a certain category.
+         *
+         * @see FirebaseAnalytics.Event#VIEW_ITEM_LIST
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see Analytic.View#list(Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#VIEW_ITEM_LIST">VIEW_ITEM_LIST</a>
+         */
+        public static synchronized void list(@NonNull String category) {
+
+            boolean canTrack =
+                    (!Utils.isEmpty(category));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+
+                //track
+                list(category, bundle);
+            }
+
         }
     }
 }

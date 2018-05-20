@@ -234,6 +234,117 @@ public class AnalyticTest {
         assertThat(exception, is(equalTo(null)));
     }
 
+    @Test
+    public void shouldBeAbleToTrackItemView_01() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.View.item(params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackItemView_02() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.View.item(TEST_PARAM, TEST_PARAM, TEST_PARAM, params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackItemView_03() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.View.item(TEST_PARAM, TEST_PARAM, params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackItemView_04() {
+        Exception exception = null;
+        try {
+            Analytic.View.item(TEST_PARAM, TEST_PARAM);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackItemView_05() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.View.item(TEST_PARAM, params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackItemView_06() {
+        Exception exception = null;
+        try {
+            Analytic.View.item(TEST_PARAM);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackItemListView_01() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.View.list(params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackItemListView_02() {
+        Exception exception = null;
+        try {
+            Bundle params = new Bundle();
+            params.putString(TEST_PARAM, TEST_PARAM);
+            Analytic.View.list(TEST_PARAM, params);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackItemListView_03() {
+        Exception exception = null;
+        try {
+            Analytic.View.list(TEST_PARAM);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
 
     @After
     public void clean() {

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.github.lykmapipo.analytic.Analytic;
 import com.github.lykmapipo.analytic.sample.R;
 
 
@@ -19,12 +20,13 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO show common events scenario
 
-        //simulate force device sync
-        Button syncButton = (Button) findViewById(R.id.sync);
-        syncButton.setOnClickListener(new View.OnClickListener() {
+        //simulate log event
+        Button eventButton = (Button) findViewById(R.id.event);
+        eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Force device sync
+                //log event
+                Analytic.App.opened();
             }
         });
 

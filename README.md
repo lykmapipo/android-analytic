@@ -3,8 +3,7 @@ android-analytic
 
 [![](https://jitpack.io/v/lykmapipo/android-analytic.svg)](https://jitpack.io/#lykmapipo/android-analytic)
 
-Android Firebase Analytic library
-
+Simplified wrapper for Firebase Analytics to provide utility helpers
 
 ## Installation
 Add [https://jitpack.io](https://jitpack.io) to your build.gradle with:
@@ -47,10 +46,15 @@ In your `android components` start tracking and log events
 Analytic.App.opened();
 Analytic.App.signedIn("google");
 Analytic.App.loggedIn("google");
+Analytic.App.share("sms");
 
 
 Analytic.Tutorial.begin();
 Analytic.Tutorial.complete();
+
+
+Analytic.View.item("Hello", "Song");
+Analytic.View.item("Get Real", "Book");
 
 
 ```
