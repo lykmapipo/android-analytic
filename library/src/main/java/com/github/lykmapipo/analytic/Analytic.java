@@ -155,6 +155,7 @@ public class Analytic {
      */
     public static class Param {
         public static final String PAYMENT_METHOD = "payment_method";//method used to pay e.g paypal
+        public static final String PAYMENT_REFERENCE = "payment_reference";//unique payment identifier e.g transaction id, receipt etc.
         public static final String TIMEZONE = "timezone"; //event timezone
         public static final String TIME = "time"; // event time
         public static final String MEDIUM = "medium"; //event medium(or channel)
@@ -1091,7 +1092,8 @@ public class Analytic {
          * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ECOMMERCE_PURCHASE">ECOMMERCE_PURCHASE</a>
          */
         public static synchronized void purchase(
-                @NonNull Double value, @NonNull String currency, @NonNull String method) {
+                @NonNull Double value, @NonNull String currency,
+                @NonNull String method, @NonNull String reference) {
 
             boolean canTrack =
                     (value != null && !Utils.isEmpty(currency));
@@ -1101,6 +1103,7 @@ public class Analytic {
                 //prepare parameters
                 Bundle bundle = new Bundle();
                 bundle.putString(Param.PAYMENT_METHOD, method);
+                bundle.putString(Param.PAYMENT_REFERENCE, reference);
 
                 //track
                 purchase(value, currency, bundle);
