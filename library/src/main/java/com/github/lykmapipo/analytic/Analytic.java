@@ -28,17 +28,13 @@ public class Analytic {
     /**
      * Analytic parameters & values
      */
-    public static final String PARAM_TIMEZONE = "timezone"; //event timezone
-    public static final String PARAM_TIME = "time"; // event time
-    public static final String PARAM_MEDIUM = "medium"; //event medium(or channel)
+
     public static final String VALUE_MEDIUM_ANDROID = "android";
     public static final String VALUE_DEFAULT_CURRENCY = "USD";
-
     /**
      * {@link FirebaseAnalytics} instance
      */
     private static FirebaseAnalytics analytics;
-
     /**
      * Default event parameter
      */
@@ -86,9 +82,9 @@ public class Analytic {
         Bundle params = new Bundle();
         params.putAll(defaultEventParams);
 
-        params.putString(PARAM_TIMEZONE, Utils.getTimezone()); //timezone
-        params.putLong(PARAM_TIME, new Date().getTime()); //time
-        params.putString(PARAM_MEDIUM, VALUE_MEDIUM_ANDROID);//medium
+        params.putString(Param.TIMEZONE, Utils.getTimezone()); //timezone
+        params.putLong(Param.TIME, new Date().getTime()); //time
+        params.putString(Param.MEDIUM, VALUE_MEDIUM_ANDROID);//medium
 
         return params;
     }
@@ -140,7 +136,7 @@ public class Analytic {
         //set event time
         Date eventTime = event.getTime();
         if (eventTime != null) {
-            params.putLong(PARAM_TIME, eventTime.getTime());
+            params.putLong(Param.TIME, eventTime.getTime());
         }
 
         //obtain event params
@@ -152,6 +148,16 @@ public class Analytic {
         //track event
         track(event.getName(), params);
 
+    }
+
+    /**
+     * params
+     */
+    public static class Param {
+        public static final String PAYMENT_METHOD = "payment_method";//method used to pay e.g paypal
+        public static final String TIMEZONE = "timezone"; //event timezone
+        public static final String TIME = "time"; // event time
+        public static final String MEDIUM = "medium"; //event medium(or channel)
     }
 
 
@@ -719,9 +725,6 @@ public class Analytic {
      * Track ecommerce events
      */
     public static class Ecommerce {
-
-        //WISHLIST
-
         /**
          * E-Commerce Add To Wishlist event.
          * This event signifies that an item was added to a wishlist.
@@ -753,6 +756,7 @@ public class Analytic {
 
         }
 
+        //WISHLIST
 
         /**
          * E-Commerce Add To Wishlist event.
@@ -796,7 +800,6 @@ public class Analytic {
 
         }
 
-
         /**
          * E-Commerce Add To Wishlist event.
          * This event signifies that an item was added to a wishlist.
@@ -829,7 +832,6 @@ public class Analytic {
 
         }
 
-
         /**
          * E-Commerce Add To Wishlist event.
          * This event signifies that an item was added to a wishlist.
@@ -855,9 +857,6 @@ public class Analytic {
             }
 
         }
-
-
-        //CHECKOUT
 
         /**
          * E-Commerce Begin Checkout event.
@@ -885,6 +884,8 @@ public class Analytic {
         }
 
 
+        //CHECKOUT
+
         /**
          * E-Commerce Begin Checkout event.
          * This event signifies that a user has begun the process of checking out.
@@ -905,7 +906,6 @@ public class Analytic {
             beginCheckout(bundle);
 
         }
-
 
         /**
          * E-Commerce Checkout Progress event.
@@ -929,7 +929,6 @@ public class Analytic {
             track(eventName, bundle);
 
         }
-
 
         /**
          * E-Commerce Checkout Progress event.
@@ -988,10 +987,6 @@ public class Analytic {
 
         }
 
-
-        //PURCHASE
-
-
         /**
          * E-Commerce Purchase event.
          * This event signifies that an item was purchased by a user.
@@ -1020,6 +1015,8 @@ public class Analytic {
 
         }
 
+
+        //PURCHASE
 
         /**
          * E-Commerce Purchase event.
@@ -1055,7 +1052,6 @@ public class Analytic {
 
         }
 
-
         /**
          * E-Commerce Purchase event.
          * This event signifies that an item was purchased by a user.
@@ -1076,6 +1072,35 @@ public class Analytic {
 
                 //prepare parameters
                 Bundle bundle = new Bundle();
+
+                //track
+                purchase(value, currency, bundle);
+
+            }
+
+        }
+
+        /**
+         * E-Commerce Purchase event.
+         * This event signifies that an item was purchased by a user.
+         *
+         * @see FirebaseAnalytics.Event#ECOMMERCE_PURCHASE
+         * @see FirebaseAnalytics.Param#CURRENCY
+         * @see FirebaseAnalytics.Param#VALUE
+         * @see Analytic.Ecommerce#purchase(Double, String, Bundle)
+         * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event.html#ECOMMERCE_PURCHASE">ECOMMERCE_PURCHASE</a>
+         */
+        public static synchronized void purchase(
+                @NonNull Double value, @NonNull String currency, @NonNull String method) {
+
+            boolean canTrack =
+                    (value != null && !Utils.isEmpty(currency));
+
+            if (canTrack) {
+
+                //prepare parameters
+                Bundle bundle = new Bundle();
+                bundle.putString(Param.PAYMENT_METHOD, method);
 
                 //track
                 purchase(value, currency, bundle);

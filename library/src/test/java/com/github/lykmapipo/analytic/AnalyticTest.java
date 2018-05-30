@@ -82,11 +82,11 @@ public class AnalyticTest {
         Bundle params = Analytic.getDefaultEventParams();
 
         //assert timezone
-        String timezone = params.getString(Analytic.PARAM_TIMEZONE);
+        String timezone = params.getString(Analytic.Param.TIMEZONE);
         assertThat(timezone, is(not(equalTo(null))));
 
         //assert time
-        Long time = params.getLong(Analytic.PARAM_TIME);
+        Long time = params.getLong(Analytic.Param.TIME);
         assertThat(time, is(not(equalTo(null))));
     }
 
