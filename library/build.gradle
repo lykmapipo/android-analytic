@@ -21,14 +21,18 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api "com.android.support:support-v4:${ANDROID_SUPPORT_VERSION}"
-    api "com.android.support:appcompat-v7:${ANDROID_SUPPORT_VERSION}"
+    implementation "androidx.annotation:annotation:${ANDROIDX_ANNOTATION_VERSION}"
+    api "androidx.legacy:legacy-support-v4:${ANDROIDX_LEGACY_SUPPORT_VERSION}"
+    api "androidx.appcompat:appcompat:${ANDROIDX_APPCOMPAT_VERSION}"
     api "com.google.firebase:firebase-core:${FIREBASE_CORE_VERSION}"
 
-    //test dependencies
+    // test dependencies
     testImplementation "junit:junit:${JUNIT_VERSION}"
     testImplementation "org.mockito:mockito-core:${MOCKITO_VERSION}"
     testImplementation "org.robolectric:robolectric:${ROBOLECTRIC_VERSION}"
+    testImplementation "com.squareup.okhttp3:mockwebserver:${OKHTTP_VERSION}"
+    testImplementation "com.squareup.retrofit2:retrofit-mock:${RETROFIT_VERSION}"
+    testImplementation "androidx.test:core:${ANDROIDX_TEST_CORE}"
 }
 
 // build a jar with source files

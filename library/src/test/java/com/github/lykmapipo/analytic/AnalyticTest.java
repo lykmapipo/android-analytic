@@ -3,6 +3,8 @@ package com.github.lykmapipo.analytic;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.junit.After;
@@ -10,8 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowApplication;
 
 import java.util.Date;
 
@@ -27,7 +27,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @email lallyelias87@gmail.com
  */
 
-@Config(sdk = 23)
 @RunWith(RobolectricTestRunner.class)
 public class AnalyticTest {
     private String TEST_EVENT = "test_event";
@@ -39,7 +38,7 @@ public class AnalyticTest {
 
     @Before
     public void setup() {
-        context = ShadowApplication.getInstance().getApplicationContext();
+        context = ApplicationProvider.getApplicationContext();
     }
 
 
