@@ -2,6 +2,7 @@ package com.github.lykmapipo.analytic;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
@@ -45,6 +46,7 @@ public class Analytic {
      *
      * @param context {@link Context}
      * @return {@link FirebaseAnalytics}
+     * @deprecated
      */
     @RequiresPermission(
             allOf = {
@@ -54,6 +56,29 @@ public class Analytic {
             }
     )
     public static synchronized FirebaseAnalytics initialize(@NonNull Context context) {
+
+        //instantiate if not exist
+        if (analytics == null) {
+            analytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
+        }
+
+        return analytics;
+    }
+
+    /**
+     * Initialize analytic
+     *
+     * @param context {@link Context}
+     * @return {@link FirebaseAnalytics}
+     */
+    @RequiresPermission(
+            allOf = {
+                    "android.permission.INTERNET",
+                    "android.permission.ACCESS_NETWORK_STATE",
+                    "android.permission.WAKE_LOCK"
+            }
+    )
+    public static synchronized FirebaseAnalytics create(@NonNull Context context) {
 
         //instantiate if not exist
         if (analytics == null) {

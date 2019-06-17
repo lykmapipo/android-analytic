@@ -45,7 +45,7 @@ public class AnalyticTest {
     @Test
     public void shouldBeAbleToGetAnalyticInstance_01() {
 
-        FirebaseAnalytics instance = Analytic.initialize(context);
+        FirebaseAnalytics instance = Analytic.create(context);
 
         assertThat(instance, is(not(equalTo(null))));
         assertThat(instance, is(instanceOf(FirebaseAnalytics.class)));
@@ -54,7 +54,7 @@ public class AnalyticTest {
     @Test
     public void shouldBeAbleToGetAnalyticInstance_02() {
 
-        Analytic.initialize(context);
+        Analytic.create(context);
         FirebaseAnalytics instance = Analytic.getInstance();
 
         assertThat(instance, is(not(equalTo(null))));
@@ -64,8 +64,8 @@ public class AnalyticTest {
     @Test
     public void shouldBeAbleToGetSameAnalyticInstance() {
 
-        FirebaseAnalytics instance_1 = Analytic.initialize(context);
-        FirebaseAnalytics instance_2 = Analytic.initialize(context);
+        FirebaseAnalytics instance_1 = Analytic.create(context);
+        FirebaseAnalytics instance_2 = Analytic.create(context);
 
         assertThat(instance_1, is(not(equalTo(null))));
         assertThat(instance_1, is(instanceOf(FirebaseAnalytics.class)));
