@@ -15,7 +15,7 @@ public class SampleApp extends Application {
         super.onCreate();
 
         //initialize analytic
-        Analytic.initialize(getApplicationContext());
+        Analytic.create(getApplicationContext());
 
     }
 }
