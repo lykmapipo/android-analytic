@@ -32,9 +32,7 @@ public class SampleApp extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //initialize analytic
-        Analytic.initialize(getApplicationContext());
+        Analytic.create(getApplicationContext());
     }
 
 }
@@ -42,7 +40,7 @@ public class SampleApp extends Application{
 
 In your `android components` start tracking and log events
 
-```java
+```js
 Analytic.App.opened();
 Analytic.App.signedIn("google");
 Analytic.App.loggedIn("google");
