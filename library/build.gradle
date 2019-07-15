@@ -6,15 +6,15 @@ group = 'com.github.lykmapipo'
 android {
     compileSdkVersion 28
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 40
         versionName "0.4.0"
         consumerProguardFiles 'proguard-rules.pro'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     testOptions {
@@ -36,8 +36,6 @@ dependencies {
     testImplementation "junit:junit:${JUNIT_VERSION}"
     testImplementation "org.mockito:mockito-core:${MOCKITO_VERSION}"
     testImplementation "org.robolectric:robolectric:${ROBOLECTRIC_VERSION}"
-    testImplementation "com.squareup.okhttp3:mockwebserver:${OKHTTP_VERSION}"
-    testImplementation "com.squareup.retrofit2:retrofit-mock:${RETROFIT_VERSION}"
     testImplementation "androidx.test:core:${ANDROIDX_TEST_CORE}"
 }
 

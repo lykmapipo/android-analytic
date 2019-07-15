@@ -8,15 +8,15 @@ android {
 
     defaultConfig {
         applicationId "com.github.lykmapipo.analytic.sample"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 10
         versionName "0.1.0"
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -29,6 +29,8 @@ android {
 
 dependencies {
     implementation project(':library')
+
+    implementation "androidx.appcompat:appcompat:${ANDROIDX_APPCOMPAT_VERSION}"
 }
 
 apply plugin: 'com.google.gms.google-services'

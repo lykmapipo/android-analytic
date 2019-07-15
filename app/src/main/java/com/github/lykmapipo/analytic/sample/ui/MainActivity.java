@@ -1,9 +1,10 @@
 package com.github.lykmapipo.analytic.sample.ui;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.lykmapipo.analytic.Analytic;
 import com.github.lykmapipo.analytic.sample.R;
