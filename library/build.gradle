@@ -30,7 +30,7 @@ dependencies {
     implementation "androidx.annotation:annotation:${ANDROIDX_ANNOTATION_VERSION}"
     implementation "androidx.legacy:legacy-support-v4:${ANDROIDX_LEGACY_SUPPORT_VERSION}"
     implementation "androidx.appcompat:appcompat:${ANDROIDX_APPCOMPAT_VERSION}"
-    implementation "com.google.firebase:firebase-core:${FIREBASE_CORE_VERSION}"
+    api "com.google.firebase:firebase-core:${FIREBASE_CORE_VERSION}"
 
     // test dependencies
     testImplementation "junit:junit:${JUNIT_VERSION}"
