@@ -31,7 +31,6 @@ dependencies {
     implementation "androidx.legacy:legacy-support-v4:${ANDROIDX_LEGACY_SUPPORT_VERSION}"
     implementation "androidx.appcompat:appcompat:${ANDROIDX_APPCOMPAT_VERSION}"
     api "com.google.firebase:firebase-core:${FIREBASE_CORE_VERSION}"
-    api "com.github.lykmapipo:android-log:${ANDROID_LOG_VERSION}"
 
     // test dependencies
     testImplementation "junit:junit:${JUNIT_VERSION}"
