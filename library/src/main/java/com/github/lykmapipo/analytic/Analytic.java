@@ -29,13 +29,14 @@ public class Analytic {
     /**
      * Analytic parameters & values
      */
-
     public static final String VALUE_MEDIUM_ANDROID = "android";
     public static final String VALUE_DEFAULT_CURRENCY = "USD";
+
     /**
      * {@link FirebaseAnalytics} instance
      */
     private static FirebaseAnalytics analytics;
+
     /**
      * Default event parameter
      */
@@ -58,11 +59,7 @@ public class Analytic {
     public static synchronized FirebaseAnalytics initialize(@NonNull Context context) {
 
         //instantiate if not exist
-        if (analytics == null) {
-            analytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
-        }
-
-        return analytics;
+        return create(context);
     }
 
     /**
