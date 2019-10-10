@@ -18,7 +18,7 @@ add `android-analytic` dependency into your project
 
 ```gradle
 dependencies {
-    implementation 'com.github.lykmapipo:android-analytic:v0.4.1'
+    implementation 'com.github.lykmapipo:android-analytic:v0.4.2'
 }
 ```
 
