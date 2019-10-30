@@ -96,6 +96,31 @@ public class Analytic {
     }
 
     /**
+     * Set user identifier for {@link FirebaseAnalytics}
+     *
+     * @param identifier valid unique user identifier
+     * @since 0.1.0
+     */
+    public static void setUserIdentifier(@NonNull String identifier) {
+        if (analytics != null) {
+            analytics.setUserId(identifier);
+        }
+    }
+
+    /**
+     * Set user properties to {@link FirebaseAnalytics}
+     *
+     * @param key   valid property key
+     * @param value valid property value
+     * @since 0.1.0
+     */
+    public static void setUserProperty(@NonNull String key, @NonNull Object value) {
+        if (analytics != null) {
+            analytics.setUserProperty(key, String.valueOf(value));
+        }
+    }
+
+    /**
      * Derive default analytic params
      *
      * @return {@link Bundle}
