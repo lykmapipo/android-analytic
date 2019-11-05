@@ -1,11 +1,14 @@
 package com.github.lykmapipo.analytic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -31,6 +34,7 @@ public class Analytic {
      */
     public static final String VALUE_MEDIUM_ANDROID = "android";
     public static final String VALUE_DEFAULT_CURRENCY = "USD";
+    public static final String VALUE_CONTENT_TYPE_SCREENVIEW = "screen";
 
     /**
      * {@link FirebaseAnalytics} instance
@@ -134,6 +138,48 @@ public class Analytic {
         params.putString(Param.MEDIUM, VALUE_MEDIUM_ANDROID);//medium
 
         return params;
+    }
+
+    /**
+     * Logs an app screen event. Events with the same name must have the same parameters.
+     *
+     * @param eventName   The name of the event
+     * @param activity    current screen
+     * @param screenName  viewed screen
+     * @param eventParams The map of event parameters
+     * @see FirebaseAnalytics#logEvent(String, Bundle)
+     */
+    public static synchronized void track(
+            @NonNull String eventName, @NonNull FragmentActivity activity,
+            @NonNull String screenName, @Nullable Bundle eventParams) {
+
+        //ensure analytic and event name
+        boolean canTrack =
+                (analytics != null && !Utils.isEmpty(eventName) && !Utils.isEmpty(screenName));
+
+        if (canTrack) {
+
+            //prepare event parameters
+            Bundle params = getDefaultEventParams();
+            if (eventParams != null) {
+                params.putAll(eventParams);
+            }
+
+            // set current screen
+            analytics.setCurrentScreen(activity, screenName, null);
+
+            //send event to firebase analytics
+            analytics.logEvent(eventName, params);
+
+            //debug
+            Utils.d(TAG, params.toString());
+        }
+
+        //notify not tracked
+        else {
+            Utils.d(TAG, "Fail to log event");
+        }
+
     }
 
     /**
@@ -767,6 +813,40 @@ public class Analytic {
             }
 
         }
+
+        /**
+         * View Screen event. Log this event when the user has view a specific UI screen.
+         *
+         * @see FirebaseAnalytics.Event#SELECT_CONTENT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         */
+        public static synchronized void screen(
+                @NonNull String screenName, @NonNull Fragment fragment) {
+            screen(screenName, fragment.requireActivity());
+        }
+
+        /**
+         * View Screen event. Log this event when the user has view a specific UI screen.
+         *
+         * @see FirebaseAnalytics.Event#SELECT_CONTENT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         */
+        public static synchronized void screen(
+                @NonNull String screenName, @NonNull FragmentActivity activity) {
+
+            String eventName = FirebaseAnalytics.Event.SELECT_CONTENT;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, screenName);
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, VALUE_CONTENT_TYPE_SCREENVIEW);
+
+            //track
+            track(eventName, activity, screenName, bundle);
+        }
+
     }
 
     /**
