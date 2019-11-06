@@ -3,8 +3,10 @@ package com.github.lykmapipo.analytic;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 
+import com.github.lykmapipo.common.provider.Provider;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.junit.After;
@@ -35,17 +37,25 @@ public class AnalyticTest {
     private Double TEST_VALUE = 20.20;
     private Long TEST_LONG = 2L;
     private Context context;
+    private Provider appProvider;
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
+        appProvider = new Provider() {
+            @NonNull
+            @Override
+            public Context getApplicationContext() {
+                return context;
+            }
+        };
     }
 
 
     @Test
     public void shouldBeAbleToGetAnalyticInstance_01() {
 
-        FirebaseAnalytics instance = Analytic.create(context);
+        FirebaseAnalytics instance = Analytic.of(appProvider);
 
         assertThat(instance, is(not(equalTo(null))));
         assertThat(instance, is(instanceOf(FirebaseAnalytics.class)));
@@ -54,7 +64,7 @@ public class AnalyticTest {
     @Test
     public void shouldBeAbleToGetAnalyticInstance_02() {
 
-        Analytic.create(context);
+        Analytic.of(appProvider);
         FirebaseAnalytics instance = Analytic.getInstance();
 
         assertThat(instance, is(not(equalTo(null))));
@@ -64,8 +74,8 @@ public class AnalyticTest {
     @Test
     public void shouldBeAbleToGetSameAnalyticInstance() {
 
-        FirebaseAnalytics instance_1 = Analytic.create(context);
-        FirebaseAnalytics instance_2 = Analytic.create(context);
+        FirebaseAnalytics instance_1 = Analytic.of(appProvider);
+        FirebaseAnalytics instance_2 = Analytic.of(appProvider);
 
         assertThat(instance_1, is(not(equalTo(null))));
         assertThat(instance_1, is(instanceOf(FirebaseAnalytics.class)));
@@ -417,6 +427,8 @@ public class AnalyticTest {
 
     @After
     public void clean() {
+        Analytic.dispose();
+        appProvider = null;
         context = null;
     }
 }

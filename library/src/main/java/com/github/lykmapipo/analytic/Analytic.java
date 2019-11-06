@@ -1,6 +1,5 @@
 package com.github.lykmapipo.analytic;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -10,6 +9,7 @@ import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.github.lykmapipo.common.provider.Provider;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Date;
@@ -42,6 +42,11 @@ public class Analytic {
     private static FirebaseAnalytics analytics;
 
     /**
+     * {@link Provider} instance
+     */
+    private static Provider appProvider;
+
+    /**
      * Default event parameter
      */
     private static Bundle defaultEventParams = new Bundle();
@@ -49,27 +54,7 @@ public class Analytic {
     /**
      * Initialize analytic
      *
-     * @param context {@link Context}
-     * @return {@link FirebaseAnalytics}
-     * @deprecated
-     */
-    @RequiresPermission(
-            allOf = {
-                    "android.permission.INTERNET",
-                    "android.permission.ACCESS_NETWORK_STATE",
-                    "android.permission.WAKE_LOCK"
-            }
-    )
-    public static synchronized FirebaseAnalytics initialize(@NonNull Context context) {
-
-        //instantiate if not exist
-        return create(context);
-    }
-
-    /**
-     * Initialize analytic
-     *
-     * @param context {@link Context}
+     * @param provider {@link Provider}
      * @return {@link FirebaseAnalytics}
      */
     @RequiresPermission(
@@ -79,14 +64,22 @@ public class Analytic {
                     "android.permission.WAKE_LOCK"
             }
     )
-    public static synchronized FirebaseAnalytics create(@NonNull Context context) {
+    public static synchronized FirebaseAnalytics of(@NonNull Provider provider) {
 
         //instantiate if not exist
         if (analytics == null) {
-            analytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
+            appProvider = provider;
+            analytics = FirebaseAnalytics.getInstance(appProvider.getApplicationContext());
         }
-
         return analytics;
+    }
+
+    /**
+     * Clean up and reset {@link Analytic} internals
+     */
+    public static synchronized void dispose() {
+        analytics = null;
+        appProvider = null;
     }
 
     /**

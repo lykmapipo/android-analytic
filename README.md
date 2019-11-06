@@ -27,14 +27,27 @@ dependencies {
 Initialize `android-analytic`
 
 ```java
-public class SampleApp extends Application{
-
+public class SampleApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Analytic.create(getApplicationContext());
-    }
 
+        // initialize {@link Analytic} internals
+        Analytic.of(new Provider() {
+            @NonNull
+            @Override
+            public Context getApplicationContext() {
+                return SampleApp.this;
+            }
+
+            @NonNull
+            @Override
+            public Boolean isDebug() {
+                return BuildConfig.DEBUG;
+            }
+        });
+
+    }
 }
 ```
 
