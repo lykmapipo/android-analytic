@@ -70,11 +70,6 @@ Analytic.View.item("Get Real", "Book");
 
 ```
 
-## Android API
-
-> TODO
-
-
 ## Test
 ```sh
 ./gradlew test
@@ -88,7 +83,7 @@ Do not forget to add a bit of test(s) of what value you adding.
 
 (The MIT License)
 
-Copyright (c) 2018 lykmapipo && Contributors
+Copyright (c) lykmapipo && Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
