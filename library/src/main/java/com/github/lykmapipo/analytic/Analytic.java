@@ -1,6 +1,5 @@
 package com.github.lykmapipo.analytic;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,7 +8,9 @@ import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.github.lykmapipo.common.Common;
 import com.github.lykmapipo.common.provider.Provider;
+import com.github.lykmapipo.log.Log;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.Date;
@@ -69,6 +70,7 @@ public class Analytic {
         //instantiate if not exist
         if (analytics == null) {
             appProvider = provider;
+            Log.of(appProvider);
             analytics = FirebaseAnalytics.getInstance(appProvider.getApplicationContext());
         }
         return analytics;
@@ -78,6 +80,7 @@ public class Analytic {
      * Clean up and reset {@link Analytic} internals
      */
     public static synchronized void dispose() {
+        Log.dispose();
         analytics = null;
         appProvider = null;
     }
@@ -100,6 +103,7 @@ public class Analytic {
      */
     public static void setUserIdentifier(@NonNull String identifier) {
         if (analytics != null) {
+            Log.setUserIdentifier(identifier);
             analytics.setUserId(identifier);
         }
     }
@@ -113,6 +117,7 @@ public class Analytic {
      */
     public static void setUserProperty(@NonNull String key, @NonNull Object value) {
         if (analytics != null) {
+            Log.setUserProperty(key, value);
             analytics.setUserProperty(key, String.valueOf(value));
         }
     }
@@ -126,7 +131,7 @@ public class Analytic {
         Bundle params = new Bundle();
         params.putAll(defaultEventParams);
 
-        params.putString(Param.TIMEZONE, Utils.getTimezone()); //timezone
+        params.putString(Param.TIMEZONE, Common.Dates.timezone()); //timezone
         params.putLong(Param.TIME, new Date().getTime()); //time
         params.putString(Param.MEDIUM, VALUE_MEDIUM_ANDROID);//medium
 
@@ -148,7 +153,7 @@ public class Analytic {
 
         //ensure analytic and event name
         boolean canTrack =
-                (analytics != null && !Utils.isEmpty(eventName) && !Utils.isEmpty(screenName));
+                (analytics != null && !Common.Strings.areEmpty(eventName, screenName));
 
         if (canTrack) {
 
@@ -165,12 +170,12 @@ public class Analytic {
             analytics.logEvent(eventName, params);
 
             //debug
-            Utils.d(TAG, params.toString());
+            Log.d(TAG, params.toString());
         }
 
         //notify not tracked
         else {
-            Utils.d(TAG, "Fail to log event");
+            Log.d(TAG, "Fail to log event");
         }
 
     }
@@ -185,7 +190,7 @@ public class Analytic {
     public static synchronized void track(@NonNull String eventName, @Nullable Bundle eventParams) {
 
         //ensure analytic and event name
-        boolean canTrack = (analytics != null && !Utils.isEmpty(eventName));
+        boolean canTrack = (analytics != null && !Common.Strings.isEmpty(eventName));
 
         if (canTrack) {
 
@@ -199,12 +204,12 @@ public class Analytic {
             analytics.logEvent(eventName, params);
 
             //debug
-            Utils.d(TAG, params.toString());
+            Log.d(TAG, params.toString());
         }
 
         //notify not tracked
         else {
-            Utils.d(TAG, "Fail to log event");
+            Log.d(TAG, "Fail to log event");
         }
 
     }
@@ -325,7 +330,7 @@ public class Analytic {
          */
         public static synchronized void loggedIn(@NonNull String method, @Nullable Bundle params) {
 
-            if (!Utils.isEmpty(method)) {
+            if (!Common.Strings.isEmpty(method)) {
 
                 //prepare parameters
                 Bundle bundle = new Bundle();
@@ -397,7 +402,7 @@ public class Analytic {
          */
         public static synchronized void signedUp(@NonNull String method, @Nullable Bundle params) {
 
-            if (!Utils.isEmpty(method)) {
+            if (!Common.Strings.isEmpty(method)) {
 
                 //prepare parameters
                 Bundle bundle = new Bundle();
@@ -471,7 +476,7 @@ public class Analytic {
                 @NonNull String contentType, @Nullable Bundle params) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(method) && !Utils.isEmpty(itemId) && !Utils.isEmpty(contentType));
+                    (!Common.Strings.isEmpty(method) && !Common.Strings.isEmpty(itemId) && !Common.Strings.isEmpty(contentType));
 
             if (canTrack) {
 
@@ -501,7 +506,7 @@ public class Analytic {
                 @NonNull String method, @NonNull String itemId, @NonNull String contentType) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(method) && !Utils.isEmpty(itemId) && !Utils.isEmpty(contentType));
+                    (!Common.Strings.isEmpty(method) && !Common.Strings.isEmpty(itemId) && !Common.Strings.isEmpty(contentType));
 
             if (canTrack) {
 
@@ -646,7 +651,7 @@ public class Analytic {
                 @NonNull String category, @Nullable Bundle params) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(id) && !Utils.isEmpty(name) && !Utils.isEmpty(category));
+                    (!Common.Strings.isEmpty(id) && !Common.Strings.isEmpty(name) && !Common.Strings.isEmpty(category));
 
             if (canTrack) {
 
@@ -682,7 +687,7 @@ public class Analytic {
                 @NonNull String name, @NonNull String category, @Nullable Bundle params) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(name) && !Utils.isEmpty(category));
+                    (!Common.Strings.isEmpty(name) && !Common.Strings.isEmpty(category));
 
             if (canTrack) {
 
@@ -714,7 +719,7 @@ public class Analytic {
         public static synchronized void item(@NonNull String name, @NonNull String category) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(name) && !Utils.isEmpty(category));
+                    (!Common.Strings.isEmpty(name) && !Common.Strings.isEmpty(category));
 
             if (canTrack) {
 
@@ -765,7 +770,7 @@ public class Analytic {
         public static synchronized void list(@NonNull String category, @Nullable Bundle params) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(category));
+                    (!Common.Strings.isEmpty(category));
 
             if (canTrack) {
 
@@ -794,7 +799,7 @@ public class Analytic {
         public static synchronized void list(@NonNull String category) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(category));
+                    (!Common.Strings.isEmpty(category));
 
             if (canTrack) {
 
@@ -896,8 +901,8 @@ public class Analytic {
                 @NonNull String itemCategory, @NonNull Long quantity, @Nullable Bundle params) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(itemName) && !Utils.isEmpty(itemName)
-                            && !Utils.isEmpty(itemCategory) && quantity != null);
+                    (!Common.Strings.isEmpty(itemName) && !Common.Strings.isEmpty(itemName)
+                            && !Common.Strings.isEmpty(itemCategory) && quantity != null);
 
             if (canTrack) {
 
@@ -938,8 +943,8 @@ public class Analytic {
                 @NonNull String itemId, @NonNull String itemName, @NonNull String itemCategory) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(itemName) && !Utils.isEmpty(itemName)
-                            && !Utils.isEmpty(itemCategory));
+                    (!Common.Strings.isEmpty(itemName) && !Common.Strings.isEmpty(itemName)
+                            && !Common.Strings.isEmpty(itemCategory));
 
             if (canTrack) {
 
@@ -970,7 +975,7 @@ public class Analytic {
                 @NonNull String itemName, @NonNull String itemCategory) {
 
             boolean canTrack =
-                    (!Utils.isEmpty(itemName) && !Utils.isEmpty(itemCategory));
+                    (!Common.Strings.isEmpty(itemName) && !Common.Strings.isEmpty(itemCategory));
 
             //track
             if (canTrack) {
@@ -1064,7 +1069,7 @@ public class Analytic {
                 @NonNull Long step, @NonNull String option, @Nullable Bundle params) {
 
             boolean canTrack =
-                    (step != null && !Utils.isEmpty(option));
+                    (step != null && !Common.Strings.isEmpty(option));
 
             if (canTrack) {
 
@@ -1094,7 +1099,7 @@ public class Analytic {
                 @NonNull Long step, @NonNull String option) {
 
             boolean canTrack =
-                    (step != null && !Utils.isEmpty(option));
+                    (step != null && !Common.Strings.isEmpty(option));
 
             if (canTrack) {
 
@@ -1153,7 +1158,7 @@ public class Analytic {
                 @NonNull Double value, @NonNull String currency, @Nullable Bundle params) {
 
             boolean canTrack =
-                    (value != null && !Utils.isEmpty(currency));
+                    (value != null && !Common.Strings.isEmpty(currency));
 
             if (canTrack) {
 
@@ -1187,7 +1192,7 @@ public class Analytic {
                 @NonNull Double value, @NonNull String currency) {
 
             boolean canTrack =
-                    (value != null && !Utils.isEmpty(currency));
+                    (value != null && !Common.Strings.isEmpty(currency));
 
             if (canTrack) {
 
@@ -1216,7 +1221,7 @@ public class Analytic {
                 @NonNull String method, @NonNull String reference) {
 
             boolean canTrack =
-                    (value != null && !Utils.isEmpty(currency));
+                    (value != null && !Common.Strings.isEmpty(currency));
 
             if (canTrack) {
 
