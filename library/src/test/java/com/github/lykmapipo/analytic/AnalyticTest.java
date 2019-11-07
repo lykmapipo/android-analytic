@@ -31,6 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class AnalyticTest {
+    private String TEST_ACTION = "test_action";
     private String TEST_EVENT = "test_event";
     private String TEST_PARAM = "test_param";
     private String TEST_CURRENCY = "USD";
@@ -418,6 +419,17 @@ public class AnalyticTest {
         Exception exception = null;
         try {
             Analytic.Ecommerce.purchase(TEST_VALUE, TEST_CURRENCY);
+        } catch (Exception e) {
+            exception = e;
+        }
+        assertThat(exception, is(equalTo(null)));
+    }
+
+    @Test
+    public void shouldBeAbleToTrackActionPerformed_01() {
+        Exception exception = null;
+        try {
+            Analytic.Action.performed(TEST_ACTION);
         } catch (Exception e) {
             exception = e;
         }

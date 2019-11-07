@@ -35,6 +35,7 @@ public class Analytic {
      */
     public static final String VALUE_MEDIUM_ANDROID = "android";
     public static final String VALUE_DEFAULT_CURRENCY = "USD";
+    public static final String VALUE_CONTENT_TYPE_ACTION = "action_performed";
     public static final String VALUE_CONTENT_TYPE_SCREENVIEW = "screen";
 
     /**
@@ -1237,5 +1238,48 @@ public class Analytic {
 
         }
 
+    }
+
+    /**
+     * Track common actions
+     */
+    public static class Action {
+        /**
+         * Action performed event. Log this event when the user perform an action.
+         *
+         * @see FirebaseAnalytics.Event#SELECT_CONTENT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         * @see FirebaseAnalytics.Param#GROUP_ID
+         * @see FirebaseAnalytics.Param#METHOD
+         */
+        public static synchronized void performed(
+                @NonNull String actionName) {
+            performed(actionName, new Bundle());
+        }
+
+        /**
+         * Action performed event. Log this event when the user perform an action.
+         *
+         * @see FirebaseAnalytics.Event#SELECT_CONTENT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         * @see FirebaseAnalytics.Param#GROUP_ID
+         * @see FirebaseAnalytics.Param#METHOD
+         */
+        public static synchronized void performed(
+                @NonNull String actionName, @NonNull Bundle params) {
+
+            String eventName = FirebaseAnalytics.Event.SELECT_CONTENT;
+
+            //prepare parameters
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, VALUE_CONTENT_TYPE_ACTION);
+            bundle.putString(FirebaseAnalytics.Param.GROUP_ID, actionName);
+            bundle.putAll(params);
+
+            //track
+            track(eventName, bundle);
+        }
     }
 }
