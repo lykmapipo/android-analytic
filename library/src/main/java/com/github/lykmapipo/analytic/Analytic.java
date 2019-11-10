@@ -243,6 +243,19 @@ public class Analytic {
     }
 
     /**
+     * Interface definition for a item params
+     *
+     * @since 0.1.0
+     */
+    public interface Itemable {
+        @NonNull
+        String getItemId();
+
+        @NonNull
+        String getItemCategory();
+    }
+
+    /**
      * params
      */
     public static class Param {
@@ -252,7 +265,6 @@ public class Analytic {
         public static final String TIME = "time"; // event time
         public static final String MEDIUM = "medium"; //event medium(or channel)
     }
-
 
     /**
      * Track app events
@@ -521,7 +533,6 @@ public class Analytic {
 
     }
 
-
     /**
      * Track tutorial events
      */
@@ -598,7 +609,6 @@ public class Analytic {
             complete(params);
         }
     }
-
 
     /**
      * Track view events
@@ -1271,11 +1281,7 @@ public class Analytic {
          */
         public static synchronized void performed(
                 @NonNull String actionName, @NonNull String itemId) {
-
-            Bundle params = new Bundle();
-            params.putString(FirebaseAnalytics.Param.ITEM_ID, itemId);
-
-            performed(actionName, params);
+            performed(actionName, itemId, new Bundle());
         }
 
         /**
@@ -1310,12 +1316,40 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#METHOD
          */
         public static synchronized void performed(
+                @NonNull String actionName, @NonNull Itemable itemable) {
+            performed(actionName, itemable.getItemId(), itemable.getItemCategory());
+        }
+
+        /**
+         * Action performed event. Log this event when the user perform an action.
+         *
+         * @see FirebaseAnalytics.Event#SELECT_CONTENT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         * @see FirebaseAnalytics.Param#GROUP_ID
+         * @see FirebaseAnalytics.Param#METHOD
+         */
+        public static synchronized void performed(
                 @NonNull String actionName, @NonNull String itemId,
                 @NonNull String itemCategory) {
-            Bundle params = new Bundle();
-            params.putString(FirebaseAnalytics.Param.ITEM_ID, itemId);
-            params.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, itemCategory);
-            performed(actionName, params);
+            performed(actionName, itemId, itemCategory, new Bundle());
+        }
+
+        /**
+         * Action performed event. Log this event when the user perform an action.
+         *
+         * @see FirebaseAnalytics.Event#SELECT_CONTENT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         * @see FirebaseAnalytics.Param#GROUP_ID
+         * @see FirebaseAnalytics.Param#METHOD
+         */
+        public static synchronized void performed(
+                @NonNull String actionName, @NonNull Itemable itemable,
+                @NonNull Bundle params) {
+            performed(actionName, itemable.getItemId(), itemable.getItemCategory(), params);
         }
 
         /**
