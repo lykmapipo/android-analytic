@@ -71,6 +71,7 @@ public class Analytic {
         //instantiate if not exist
         if (analytics == null) {
             appProvider = provider;
+            Common.of(appProvider);
             Log.of(appProvider);
             analytics = FirebaseAnalytics.getInstance(appProvider.getApplicationContext());
         }
@@ -81,7 +82,6 @@ public class Analytic {
      * Clean up and reset {@link Analytic} internals
      */
     public static synchronized void dispose() {
-        Log.dispose();
         analytics = null;
         appProvider = null;
     }
@@ -1390,10 +1390,10 @@ public class Analytic {
             String eventName = FirebaseAnalytics.Event.SELECT_CONTENT;
 
             //prepare parameters
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, VALUE_CONTENT_TYPE_ACTION);
-            bundle.putString(FirebaseAnalytics.Param.GROUP_ID, actionName);
-            bundle = Common.Bundles.from(params, bundle);
+            Bundle base = new Bundle();
+            base.putString(FirebaseAnalytics.Param.CONTENT_TYPE, VALUE_CONTENT_TYPE_ACTION);
+            base.putString(FirebaseAnalytics.Param.GROUP_ID, actionName);
+            Bundle bundle = Common.Bundles.from(params, base);
 
             //track
             track(eventName, bundle);

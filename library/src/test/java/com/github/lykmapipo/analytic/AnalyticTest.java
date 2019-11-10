@@ -38,17 +38,15 @@ public class AnalyticTest {
     private String TEST_CURRENCY = "USD";
     private Double TEST_VALUE = 20.20;
     private Long TEST_LONG = 2L;
-    private Context context;
     private Provider appProvider;
 
     @Before
     public void setup() {
-        context = ApplicationProvider.getApplicationContext();
         appProvider = new Provider() {
             @NonNull
             @Override
             public Context getApplicationContext() {
-                return context;
+                return ApplicationProvider.getApplicationContext();
             }
         };
     }
@@ -453,6 +451,5 @@ public class AnalyticTest {
     public void clean() {
         Analytic.dispose();
         appProvider = null;
-        context = null;
     }
 }
