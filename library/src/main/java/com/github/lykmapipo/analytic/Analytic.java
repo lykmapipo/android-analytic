@@ -1254,6 +1254,7 @@ public class Analytic {
      * Track common actions
      */
     public static class Action {
+        // TODO: actor, acted on
         /**
          * Action performed event. Log this event when the user perform an action.
          *
