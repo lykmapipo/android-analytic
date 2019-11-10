@@ -1271,9 +1271,32 @@ public class Analytic {
          */
         public static synchronized void performed(
                 @NonNull String actionName, @NonNull String itemId) {
+
             Bundle params = new Bundle();
             params.putString(FirebaseAnalytics.Param.ITEM_ID, itemId);
+
             performed(actionName, params);
+        }
+
+        /**
+         * Action performed event. Log this event when the user perform an action.
+         *
+         * @see FirebaseAnalytics.Event#SELECT_CONTENT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         * @see FirebaseAnalytics.Param#GROUP_ID
+         * @see FirebaseAnalytics.Param#METHOD
+         */
+        public static synchronized void performed(
+                @NonNull String actionName,
+                @NonNull String itemId, @NonNull Bundle params) {
+
+            Bundle _params = new Bundle();
+            params.putString(FirebaseAnalytics.Param.ITEM_ID, itemId);
+            _params = Common.Bundles.from(_params, params);
+
+            performed(actionName, _params);
         }
 
         /**
@@ -1306,6 +1329,28 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#METHOD
          */
         public static synchronized void performed(
+                @NonNull String actionName, @NonNull String itemId,
+                @NonNull String itemCategory, @NonNull Bundle params) {
+
+            Bundle _params = new Bundle();
+            params.putString(FirebaseAnalytics.Param.ITEM_ID, itemId);
+            params.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, itemCategory);
+            _params = Common.Bundles.from(_params, params);
+
+            performed(actionName, _params);
+        }
+
+        /**
+         * Action performed event. Log this event when the user perform an action.
+         *
+         * @see FirebaseAnalytics.Event#SELECT_CONTENT
+         * @see FirebaseAnalytics.Param#ITEM_ID
+         * @see FirebaseAnalytics.Param#ITEM_CATEGORY
+         * @see FirebaseAnalytics.Param#CONTENT_TYPE
+         * @see FirebaseAnalytics.Param#GROUP_ID
+         * @see FirebaseAnalytics.Param#METHOD
+         */
+        public static synchronized void performed(
                 @NonNull String actionName, @NonNull Bundle params) {
 
             String eventName = FirebaseAnalytics.Event.SELECT_CONTENT;
@@ -1314,9 +1359,7 @@ public class Analytic {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, VALUE_CONTENT_TYPE_ACTION);
             bundle.putString(FirebaseAnalytics.Param.GROUP_ID, actionName);
-            if (params != null) {
-                bundle.putAll(params);
-            }
+            bundle = Common.Bundles.from(params, bundle);
 
             //track
             track(eventName, bundle);
