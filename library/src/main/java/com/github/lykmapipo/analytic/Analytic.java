@@ -258,13 +258,14 @@ public class Analytic {
     /**
      * params
      */
-    public static class Param {
+    public static class Param extends FirebaseAnalytics.Param {
         public static final String PAYMENT_METHOD = "payment_method";//method used to pay e.g paypal
         public static final String PAYMENT_REFERENCE = "payment_reference";//unique payment identifier e.g transaction id, receipt etc.
         public static final String TIMEZONE = "timezone"; //event timezone
         public static final String TIME = "time"; // event time
         public static final String MEDIUM = "medium"; //event medium(or channel)
     }
+
 
     /**
      * Track app events
@@ -1255,6 +1256,7 @@ public class Analytic {
      */
     public static class Action {
         // TODO: actor, acted on
+
         /**
          * Action performed event. Log this event when the user perform an action.
          *
@@ -1264,6 +1266,7 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#CONTENT_TYPE
          * @see FirebaseAnalytics.Param#GROUP_ID
          * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#SUCCESS
          */
         public static synchronized void performed(
                 @NonNull String actionName) {
@@ -1279,6 +1282,7 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#CONTENT_TYPE
          * @see FirebaseAnalytics.Param#GROUP_ID
          * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#SUCCESS
          */
         public static synchronized void performed(
                 @NonNull String actionName, @NonNull String itemId) {
@@ -1294,6 +1298,7 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#CONTENT_TYPE
          * @see FirebaseAnalytics.Param#GROUP_ID
          * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#SUCCESS
          */
         public static synchronized void performed(
                 @NonNull String actionName,
@@ -1315,6 +1320,7 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#CONTENT_TYPE
          * @see FirebaseAnalytics.Param#GROUP_ID
          * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#SUCCESS
          */
         public static synchronized void performed(
                 @NonNull String actionName, @NonNull Itemable itemable) {
@@ -1330,6 +1336,7 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#CONTENT_TYPE
          * @see FirebaseAnalytics.Param#GROUP_ID
          * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#SUCCESS
          */
         public static synchronized void performed(
                 @NonNull String actionName, @NonNull String itemId,
@@ -1346,6 +1353,7 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#CONTENT_TYPE
          * @see FirebaseAnalytics.Param#GROUP_ID
          * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#SUCCESS
          */
         public static synchronized void performed(
                 @NonNull String actionName, @NonNull Itemable itemable,
@@ -1362,6 +1370,7 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#CONTENT_TYPE
          * @see FirebaseAnalytics.Param#GROUP_ID
          * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#SUCCESS
          */
         public static synchronized void performed(
                 @NonNull String actionName, @NonNull String itemId,
@@ -1384,6 +1393,7 @@ public class Analytic {
          * @see FirebaseAnalytics.Param#CONTENT_TYPE
          * @see FirebaseAnalytics.Param#GROUP_ID
          * @see FirebaseAnalytics.Param#METHOD
+         * @see FirebaseAnalytics.Param#SUCCESS
          */
         public static synchronized void performed(
                 @NonNull String actionName, @NonNull Bundle params) {
